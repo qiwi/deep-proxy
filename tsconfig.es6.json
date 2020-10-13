@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "es6",
+    "outDir": "target/es6",
+    "skipLibCheck": true
+  },
+  "include": ["src/main/**/*.ts"]
+}

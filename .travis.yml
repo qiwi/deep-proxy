@@ -1,0 +1,60 @@
+language: node_js
+cache: npm
+node_js: 14
+
+jobs:
+  include:
+    - &build
+      os: linux
+      stage: build
+      install: yarn
+      script: yarn build
+      # https://docs.travis-ci.com/user/using-workspaces/
+      workspaces:
+        create:
+          name: linux-shared
+          paths:
+            - target
+            - flow-typed
+            - typings
+            - docs
+    - <<: *build
+      os: windows
+      # https://travis-ci.community/t/timeout-after-build-finished-and-succeeded/1336/2
+      env: YARN_GPG=no
+      workspaces:
+        create:
+          name: win-shared
+          paths:
+            - target
+
+    - &test
+      stage: test
+      os: linux
+      node_js: 12
+      install: skip
+      script: yarn test
+      workspaces:
+        use: linux-shared
+    - <<: *test
+      node_js: 14
+      before_script:
+        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        - chmod +x ./cc-test-reporter
+        - ./cc-test-reporter before-build
+      after_script:
+        - ./cc-test-reporter format-coverage -t lcov ./coverage/lcov.info
+        - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+    - <<: *test
+      os: windows
+      env: YARN_GPG=no
+      node_js: 14
+      workspaces:
+        use: win-shared
+
+    - stage: release
+      if: branch = master AND type != pull_request
+      workspaces:
+        use: linux-shared
+      install: skip
+      script: npx semantic-release
