@@ -1,2 +1,2 @@
-# blank-ts-repo
-Template repository for TS OSS projects
+# @qiwi/deep-proxy
+Deep proxy implementation for TypeScript
