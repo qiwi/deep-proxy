@@ -72,7 +72,9 @@ const clientWithRetry = new DeepProxy(client, ({value, trapName}) => {
     if (typeof value === 'object' && value !== null) {
       return PROXY
     }
-  }  
+  }
+
+  return DEFAULT
 })
 await clientWithRetry.foo(...args) // 99% of success
 ```
@@ -84,6 +86,8 @@ Metrics, debugging, throttling — all becomes better with deep proxy.
 |`DEFAULT`| Returns standard flow control. The current operation (get, set, ownKeys, etc) will be performed as without proxy.
 |`PROXY`| Returns a proxy of nested object with parent's proxy handler.
 
+## Note
+Proxies are [slow](https://github.com/justinjmoses/node-es6-proxy-benchmark). [Very slow](https://thecodebarbarian.com/thoughts-on-es6-proxies-performance). Use them wisely with care.
 
 ## Alternatives & refs
 * [samvv/js-proxy-deep](https://github.com/samvv/js-proxy-deep)
