@@ -38,6 +38,15 @@ const trapNames = Object.keys(
   Object.getOwnPropertyDescriptors(Reflect),
 ) as Array<TTrapName>
 
+const trapsWithKey = [
+  'get',
+  'has',
+  'set',
+  'defineProperty',
+  'deleteProperty',
+  'getOwnPropertyDescriptor',
+]
+
 const createHandlerContext = <T>(
   trapContext: TTrapContext,
   target: T,
@@ -47,16 +56,7 @@ const createHandlerContext = <T>(
 ) => {
   const { path, root, trapName } = trapContext
   const args = [target, prop, val, receiver]
-  const key = [
-    'get',
-    'has',
-    'set',
-    'defineProperty',
-    'deleteProperty',
-    'getOwnPropertyDescriptor',
-  ].includes(trapName)
-    ? prop
-    : undefined
+  const key = trapsWithKey.includes(trapName) ? prop : undefined
   const value = key === undefined ? undefined : target[key]
   const newValue = trapName === 'set' ? val : undefined
 
