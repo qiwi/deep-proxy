@@ -9,10 +9,10 @@ yarn add @qiwi/deep-proxy
 
 ## Usage
 ```typescript
-import {DeepProxy, OTHERWISE, NEXT} from '@qiwi/deep-proxy'
+import {DeepProxy} from '@qiwi/deep-proxy'
 
 const target = {foo: 'bar', a: {b: 'c'}}
-const proxy = new DeepProxy(target, ({trapName, value, key}: any = {}) => {
+const proxy = new DeepProxy(target, ({trapName, value, key, DEFAULT, NEXT}: any = {}) => {
   if (trapName === 'set') {
     throw new TypeError('target is immutable')
   }
