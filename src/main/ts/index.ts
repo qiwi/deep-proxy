@@ -57,7 +57,7 @@ const createHandlerContext = <T>(
   const { path, root, trapName } = trapContext
   const args = [target, prop, val, receiver]
   const key = trapsWithKey.includes(trapName) ? prop : undefined
-  const value = key === undefined ? undefined : target[key]
+  const value = key && target[key]
   const newValue = trapName === 'set' ? val : undefined
 
   return {
