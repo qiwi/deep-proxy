@@ -1,10 +1,13 @@
 # @qiwi/deep-proxy
 Deep proxy implementation for TypeScript
 
+## Install
 ```shell script
 npm i @qiwi/deep-proxy
+yarn add @qiwi/deep-proxy
 ```
 
+## Usage
 ```typescript
 import {DeepProxy, OTHERWISE, NEXT} from '@qiwi/deep-proxy'
 
@@ -30,5 +33,7 @@ const proxy = new DeepProxy(target, ({trapName, value, key}: any = {}) => {
 })
 
 proxy.foo       // qux
+proxy.bar       // qux
+proxy.d         // baz
 proxy.a = 'a'   // TypeError
 ```
