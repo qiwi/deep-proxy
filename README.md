@@ -6,21 +6,29 @@ npm i @qiwi/deep-proxy
 ```
 
 ```typescript
-import {DeepProxy, OTHERWISE} from '@qiwi/deep-proxy'
+import {DeepProxy, OTHERWISE, NEXT} from '@qiwi/deep-proxy'
 
-const target = {foo: 'bar'}
-const proxy = new DeepProxy(target, ({trap, path}) => {
-    if (trap === 'set') {
-        throw new TypeError('target is immutable')
+const target = {foo: 'bar', a: {b: 'c'}}
+const proxy = new DeepProxy(target, ({trapName, value, key}: any = {}) => {
+  if (trapName === 'set') {
+    throw new TypeError('target is immutable')
+  }
+
+  if (trapName === 'get') {
+    if (typeof value === 'object' && value !== null) {
+      return PROXY
     }
 
-    if (trap === 'get' && path === 'baz') {
-        return 'qux'
+    if (key === 'd') {
+      return 'baz'
     }
 
-    return OTHERWISE // NOTE this magic value helps to set proxy traps correctly
+    return 'qux'
+  }
+
+  return DEFAULT
 })
 
-proxy.baz       // qux
+proxy.foo       // qux
 proxy.a = 'a'   // TypeError
 ```
