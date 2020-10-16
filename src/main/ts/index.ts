@@ -35,8 +35,8 @@ export interface DeepProxyConstructor {
   new <T extends TTarget>(
     target: T,
     handler: TProxyHandler,
-    path: string[],
-    root: TTarget
+    path?: string[],
+    root?: TTarget
   ): T
 }
 
