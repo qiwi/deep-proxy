@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>DeepProxy | @qiwi/deep-proxy</title>
+	<title>DeepProxyConstructor | @qiwi/deep-proxy</title>
 	<meta name="description" content="Documentation for @qiwi/deep-proxy">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -60,30 +60,22 @@
 					<a href="../modules/reflection-13.reflection-1.html"></a>
 				</li>
 				<li>
-					<a href="reflection-13.reflection-1.deepproxy.html">DeepProxy</a>
+					<a href="reflection-13.reflection-1.deepproxyconstructor.html">DeepProxyConstructor</a>
 				</li>
 			</ul>
-			<h1>Class DeepProxy&lt;T, T&gt;</h1>
+			<h1>Interface DeepProxyConstructor</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-type-parameters">
-				<h3>Type parameters</h3>
-				<ul class="tsd-type-parameters">
-					<li>
-						<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TTarget</span></h4>
-					</li>
-					<li>
-						<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TTarget</span></h4>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">DeepProxyConstructor</span>
+					</li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -93,7 +85,7 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="reflection-13.reflection-1.deepproxy.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-interface tsd-has-type-parameter"><a href="reflection-13.reflection-1.deepproxyconstructor.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 					</div>
@@ -101,19 +93,25 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-interface tsd-has-type-parameter">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Deep<wbr>Proxy<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TProxyHandler</span>, path<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, root<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">TTarget</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="reflection-13.reflection-1.deepproxy.html" class="tsd-signature-type">DeepProxy</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-interface tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Deep<wbr>Proxy<wbr>Constructor&lt;T&gt;<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TProxyHandler</span>, path<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, root<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">TTarget</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/qiwi/deep-proxy/blob/ef4e983/src/main/ts/index.ts#L107">index.ts:107</a></li>
+									<li>Defined in <a href="https://github.com/qiwi/deep-proxy/blob/f1825f8/src/main/ts/index.ts#L34">index.ts:34</a></li>
 								</ul>
 							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TTarget</span></h4>
+								</li>
+							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -123,13 +121,13 @@
 									<h5>handler: <span class="tsd-signature-type">TProxyHandler</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> path: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> path: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> root: <span class="tsd-signature-type">TTarget</span><span class="tsd-signature-symbol"> = target</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> root: <span class="tsd-signature-type">TTarget</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="reflection-13.reflection-1.deepproxy.html" class="tsd-signature-type">DeepProxy</a></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -147,11 +145,11 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="reflection-13.reflection-1.deepproxy.html" class="tsd-kind-icon">Deep<wbr>Proxy</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
+						<a href="reflection-13.reflection-1.deepproxyconstructor.html" class="tsd-kind-icon">Deep<wbr>Proxy<wbr>Constructor</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="reflection-13.reflection-1.deepproxy.html#constructor" class="tsd-kind-icon">constructor</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-interface tsd-has-type-parameter">
+								<a href="reflection-13.reflection-1.deepproxyconstructor.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 						</ul>
 					</li>
@@ -159,6 +157,9 @@
 				<ul class="after-current">
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="../modules/reflection-13.reflection-1.html#default" class="tsd-kind-icon">DEFAULT</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="../modules/reflection-13.reflection-1.html#deepproxy" class="tsd-kind-icon">Deep<wbr>Proxy</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="../modules/reflection-13.reflection-1.html#proxy" class="tsd-kind-icon">PROXY</a>
@@ -172,9 +173,6 @@
 	<div class="container">
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
-			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-			</ul>
 		</div>
 	</div>
 </footer>
