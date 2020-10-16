@@ -65,7 +65,7 @@
 				<a href="#qiwideep-proxy" id="qiwideep-proxy" style="color: inherit; text-decoration: none;">
 					<h1>@qiwi/deep-proxy</h1>
 				</a>
-				<p>Deep proxy implementation for TypeScript</p>
+				<p>Deep proxy implementation for TypeScript based on a single trapper.</p>
 				<a href="#install" id="install" style="color: inherit; text-decoration: none;">
 					<h2>Install</h2>
 				</a>
@@ -98,9 +98,79 @@ yarn add @qiwi/deep-proxy</code></pre>
 })
 
 proxy.foo       <span class="hljs-comment">// qux</span>
+proxy.a.b       <span class="hljs-comment">// qux</span>
 proxy.bar       <span class="hljs-comment">// qux</span>
 proxy.d         <span class="hljs-comment">// baz</span>
 proxy.a = <span class="hljs-string">&#x27;a&#x27;</span>   <span class="hljs-comment">// TypeError</span></code></pre>
+				<p>All the traps follows to the single handler, so you&#39;re able to build various complex conditions in one place. This approach might be useful if need some kind of &quot;rich&quot; model, but don&#39;t want to complicate DTO.  </p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">if</span> (path.length &gt; <span class="hljs-number">10</span>) {
+  <span class="hljs-keyword">if</span> (prop === <span class="hljs-string">&#x27;foo&#x27;</span> || [<span class="hljs-string">&#x27;get&#x27;</span>, <span class="hljs-string">&#x27;set&#x27;</span>, <span class="hljs-string">&#x27;ownKeys&#x27;</span>].includes(trapName)) {
+    <span class="hljs-keyword">return</span> DEFAULT
+  }
+
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&#x27;Bla-bla&#x27;</span>)
+}
+
+<span class="hljs-keyword">if</span> (trapName === <span class="hljs-string">&#x27;set&#x27;</span> &amp;&amp; <span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">&#x27;number&#x27;</span>) {
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">&#x27;only `number` type is allowed&#x27;</span>)
+}
+
+<span class="hljs-comment">// and so on</span>
+
+<span class="hljs-keyword">return</span> DEFAULT</code></pre>
+				<p>Another example. Imagine a client which uses an unstable channel with 10% of loss.</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> client = createClient({...opts})
+<span class="hljs-keyword">await</span> client.foo(...args) <span class="hljs-comment">// 90% of success</span>
+
+<span class="hljs-keyword">const</span> clientWithRetry = <span class="hljs-keyword">new</span> DeepProxy(client, <span class="hljs-function">(<span class="hljs-params">{value, trapName}</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (trapName === <span class="hljs-string">&#x27;get&#x27;</span>) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value === <span class="hljs-string">&#x27;function&#x27;</span>) {
+      <span class="hljs-keyword">return</span> retryify(value, <span class="hljs-number">2</span>)
+    }
+
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value === <span class="hljs-string">&#x27;object&#x27;</span> &amp;&amp; value !== <span class="hljs-literal">null</span>) {
+      <span class="hljs-keyword">return</span> PROXY
+    }
+  }
+
+  <span class="hljs-keyword">return</span> DEFAULT
+})
+<span class="hljs-keyword">await</span> clientWithRetry.foo(...args) <span class="hljs-comment">// 99% of success</span></code></pre>
+				<p>Metrics, debugging, throttling — all becomes better with deep proxy.</p>
+				<a href="#directives" id="directives" style="color: inherit; text-decoration: none;">
+					<h2>Directives</h2>
+				</a>
+				<table>
+					<thead>
+						<tr>
+							<th>Directive</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td><code>DEFAULT</code></td>
+							<td>Returns standard flow control. The current operation (get, set, ownKeys, etc) will be performed as without proxy.</td>
+						</tr>
+						<tr>
+							<td><code>PROXY</code></td>
+							<td>Returns a proxy of nested object with parent&#39;s proxy handler.</td>
+						</tr>
+				</tbody></table>
+				<a href="#note" id="note" style="color: inherit; text-decoration: none;">
+					<h2>Note</h2>
+				</a>
+				<p>Proxies are <a href="https://github.com/justinjmoses/node-es6-proxy-benchmark">slow</a>. <a href="https://thecodebarbarian.com/thoughts-on-es6-proxies-performance">Very slow</a>. Use them wisely with care.</p>
+				<a href="#alternatives-amp-refs" id="alternatives-amp-refs" style="color: inherit; text-decoration: none;">
+					<h2>Alternatives &amp; refs</h2>
+				</a>
+				<ul>
+					<li><a href="https://github.com/samvv/js-proxy-deep">samvv/js-proxy-deep</a></li>
+					<li><a href="https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots">tc39.es/proxy-object</a></li>
+				</ul>
+				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+					<h2>License</h2>
+				</a>
+				<p><a href="./LICENSE">MIT</a></p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
