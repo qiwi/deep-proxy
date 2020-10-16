@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/qiwi/deep-proxy/compare/v1.0.1...v1.0.2) (2020-10-16)
+
+
+### Bug Fixes
+
+* improve typings ([18ec806](https://github.com/qiwi/deep-proxy/commit/18ec80690ba571e0ee8cf0452384d22b99d932f5))
+
 ## [1.0.1](https://github.com/qiwi/deep-proxy/compare/v1.0.0...v1.0.1) (2020-10-16)
 
 
