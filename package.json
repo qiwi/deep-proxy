@@ -4,7 +4,7 @@
   "private": false,
   "description": "Deep proxy implementation for TypeScript",
   "source": "src/main/ts/index.ts",
-  "main": "target/es6/index.js",
+  "main": "target/bundle/deep-proxy.js",
   "module": "target/bundle/deep-proxy.mjs",
   "unpkg": "target/bundle/deep-proxy.umd.js",
   "types": "typings/index.d.ts",
