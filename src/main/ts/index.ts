@@ -31,8 +31,14 @@ type TTrapContext = {
 export const DEFAULT = Symbol('default')
 export const PROXY = Symbol('proxy')
 
-// @ts-ignore
-export interface DeepProxy<T extends TTarget> extends T {} // eslint-disable-line
+export interface DeepProxyConstructor {
+  new <T extends TTarget>(
+    target: T,
+    handler: TProxyHandler,
+    path: string[],
+    root: TTarget
+  ): T
+}
 
 const trapNames = Object.keys(
   Object.getOwnPropertyDescriptors(Reflect),
@@ -104,13 +110,13 @@ const createTraps = (root: TTarget, handler: TProxyHandler, path: string[]) =>
     return traps
   }, {} as TTraps) as ProxyHandler<TTarget>
 
-export class DeepProxy<T extends TTarget> {
+export const DeepProxy = class <T extends TTarget> {
   constructor(
     target: T,
     handler: TProxyHandler,
     path: string[] = [],
     root: TTarget = target,
   ) {
-    return new Proxy(target, createTraps(root, handler, path)) as DeepProxy<T>
+    return new Proxy(target, createTraps(root, handler, path))
   }
-}
+} as DeepProxyConstructor
