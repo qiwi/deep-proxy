@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/qiwi/deep-proxy/compare/v1.0.0...v1.0.1) (2020-10-16)
+
+
+### Bug Fixes
+
+* **package:** repack in umd ([ef4e983](https://github.com/qiwi/deep-proxy/commit/ef4e9830a13a6d162293915ad47e8b6b483e96a5))
+
 # 1.0.0 (2020-10-15)
 
 
