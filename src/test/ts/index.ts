@@ -172,6 +172,36 @@ describe('DeepProxy', () => {
           root: target,
         })
       })
+
+      it('wraps both objects and functions', () => {
+        const foo = () => 'foo' // eslint-disable-line
+        const target = {
+          foo,
+          bar: { baz: 'qux' },
+          null: null, // eslint-disable-line
+        }
+        foo.foo = 'foo.foo'
+
+        const proxy = new DeepProxy(
+          target,
+          ({ trapName, value, PROXY, DEFAULT }) => {
+            if (
+              trapName === 'get' &&
+              ((typeof value === 'object' && value !== null) ||
+                typeof value === 'function')
+            ) {
+              return PROXY
+            }
+
+            return DEFAULT
+          },
+        )
+
+        expect(proxy.foo()).toBe('foo')
+        expect(proxy.foo.foo).toBe('foo.foo')
+        expect(proxy.bar.baz).toBe('qux')
+        expect(proxy.null).toBeNull()
+      })
     })
   })
 })
