@@ -1,5 +1,5 @@
 # @qiwi/deep-proxy
-Deep proxy implementation for TypeScript based on a single trapper.
+Deep proxy implementation for TypeScript
 
 [![Build Status](https://travis-ci.com/qiwi/deep-proxy.svg?branch=master)](https://travis-ci.com/qiwi/deep-proxy)
 [![David](https://img.shields.io/david/qiwi/deep-proxy)](https://david-dm.org/qiwi/deep-proxy)
@@ -12,6 +12,12 @@ Deep proxy implementation for TypeScript based on a single trapper.
 npm i @qiwi/deep-proxy
 yarn add @qiwi/deep-proxy
 ```
+
+## Key features
+* Single proxy handler with rich context instead of trap map
+* Proxy self-reference in handler context (meaningful for methods binding)
+* JS, TS and Flow support
+* Directive shortcuts
 
 ## Usage
 ```typescript
@@ -119,7 +125,7 @@ type THandlerContext<T extends TTarget> = {
 ## Note
 Proxies are [slow](https://github.com/justinjmoses/node-es6-proxy-benchmark). [Very slow](https://thecodebarbarian.com/thoughts-on-es6-proxies-performance). Use them wisely with care.
 
-## Alternatives & refs
+## Alternatives & Refs
 * [tc39.es/proxy-object](https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots)
 * [stackoverflow/how-to-create-a-deep-proxy](https://stackoverflow.com/questions/43177855/how-to-create-a-deep-proxy)
 * [samvv/js-proxy-deep](https://github.com/samvv/js-proxy-deep)
