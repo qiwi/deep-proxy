@@ -114,7 +114,8 @@ const trap = function <T extends TTarget>(
 
   if (
     result === PROXY &&
-    (typeof value === 'object' || typeof value === 'function')
+    ((typeof value === 'object' && value !== null) ||
+      typeof value === 'function')
   ) {
     return new DeepProxy(value, handler, [...path, prop as string], root)
   }
