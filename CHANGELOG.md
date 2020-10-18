@@ -1,3 +1,20 @@
+# [1.3.0](https://github.com/qiwi/deep-proxy/compare/v1.2.1...v1.3.0) (2020-10-18)
+
+
+### Bug Fixes
+
+* check object-like proxy targets against null ([dc46084](https://github.com/qiwi/deep-proxy/commit/dc46084ee7e545762e09b6abe37a129367738ee1))
+
+
+### Features
+
+* add createDeepProxy factory ([82eb58d](https://github.com/qiwi/deep-proxy/commit/82eb58d23909232418ba67e3891763852e64d507))
+
+
+### Performance Improvements
+
+* bundle tweak ups ([e94757f](https://github.com/qiwi/deep-proxy/commit/e94757f282947617c9ce84a66903dcd4ad6de6b8))
+
 ## [1.2.1](https://github.com/qiwi/deep-proxy/compare/v1.2.0...v1.2.1) (2020-10-18)
 
 
