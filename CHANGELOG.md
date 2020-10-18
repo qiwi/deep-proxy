@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/qiwi/deep-proxy/compare/v1.2.0...v1.2.1) (2020-10-18)
+
+
+### Bug Fixes
+
+* apply proper path on proxy nesting ([cb9cd77](https://github.com/qiwi/deep-proxy/commit/cb9cd774b57a079a38313c5eee577873ab47243e))
+
 # [1.2.0](https://github.com/qiwi/deep-proxy/compare/v1.1.0...v1.2.0) (2020-10-18)
 
 
