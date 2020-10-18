@@ -36,7 +36,9 @@
     "url": "https://github.com/qiwi/deep-proxy.git"
   },
   "keywords": [
-    "deep proxy"
+    "deep proxy",
+    "deep-proxy",
+    "proxy"
   ],
   "files": [
     "README.md",
