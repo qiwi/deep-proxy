@@ -1,4 +1,5 @@
 import { ICallable } from '@qiwi/substrate'
+import util from 'util'
 
 import { DeepProxy, DEFAULT, PROXY } from '../../main/ts'
 
@@ -51,6 +52,7 @@ describe('DeepProxy', () => {
         PROXY,
         root,
         path,
+        proxy: _proxy
       }: any = {}) => {
         if (trapName === 'set') {
           expect(value).toBe('bar')
@@ -68,6 +70,8 @@ describe('DeepProxy', () => {
           expect(key).toBe('foo')
           expect(root).toBe(target)
           expect(path).toEqual([])
+          expect(util.types.isProxy(_proxy)).toBeTruthy()
+          expect(proxy).toBe(_proxy)
           done()
         }
 
@@ -98,7 +102,6 @@ describe('DeepProxy', () => {
     const proxy = new DeepProxy(
       target,
       ({
-         target,
          trapName,
          value,
          handler,
@@ -106,6 +109,7 @@ describe('DeepProxy', () => {
          PROXY,
          root,
          path,
+         proxy
        }: any = {}) => {
         if (trapName === 'get') {
           if (typeof value === 'object' && value !== null) {
@@ -113,7 +117,7 @@ describe('DeepProxy', () => {
           }
 
           if (typeof value === 'function') {
-            return new DeepProxy(Object.assign(wrapper(value).bind(target), value), handler, path, root)
+            return new DeepProxy(Object.assign(wrapper(value).bind(proxy), value), handler, path, root)
           }
         }
 
