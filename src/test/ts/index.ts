@@ -1,3 +1,5 @@
+import { ICallable } from '@qiwi/substrate'
+
 import { DeepProxy, DEFAULT, PROXY } from '../../main/ts'
 
 describe('DeepProxy', () => {
@@ -75,5 +77,53 @@ describe('DeepProxy', () => {
 
     expect((proxy.foo = 'baz')).toBe('baz')
     expect(proxy.foo).toBe('baz')
+  })
+
+  it('proxy could be applied to complex function-with-props targets', () => {
+    // eslint-disable-next-line
+    const wrapper = <T extends ICallable>(fn: T) => function (this: any, ...args: Parameters<T>) { return (fn.call(this, ...args) + '').toUpperCase() }
+    const fn = function () {
+      // @ts-ignore
+      return this.foo
+    }
+    const target = {
+      fn,
+      foo: 'foo'
+    }
+    const inner = function () { return 'inner' }
+    inner.baz = 'baz'
+    fn.bar = {baz: 'qux'}
+    fn.inner = inner
+
+    const proxy = new DeepProxy(
+      target,
+      ({
+         target,
+         trapName,
+         value,
+         handler,
+         DEFAULT,
+         PROXY,
+         root,
+         path,
+       }: any = {}) => {
+        if (trapName === 'get') {
+          if (typeof value === 'object' && value !== null) {
+            return PROXY
+          }
+
+          if (typeof value === 'function') {
+            return new DeepProxy(Object.assign(wrapper(value).bind(target), value), handler, path, root)
+          }
+        }
+
+        return DEFAULT
+      },
+    )
+
+    expect(proxy.fn()).toBe('FOO')
+    expect(proxy.fn.bar.baz).toBe('qux')
+    expect(proxy.fn.inner()).toBe('INNER')
+    expect(proxy.fn.inner.baz).toBe('baz')
   })
 })
