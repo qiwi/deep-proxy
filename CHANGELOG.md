@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/qiwi/deep-proxy/compare/v1.1.0...v1.2.0) (2020-10-18)
+
+
+### Features
+
+* add proxy and traps (proxyHandler methods map) to handler context ([ee6cb53](https://github.com/qiwi/deep-proxy/commit/ee6cb534bc6de7b0af14c8ab67eb42b20a40f100))
+
 # [1.1.0](https://github.com/qiwi/deep-proxy/compare/v1.0.2...v1.1.0) (2020-10-18)
 
 
