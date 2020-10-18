@@ -109,11 +109,14 @@ const trap = function <T extends TTarget>(
 ) {
   const { trapName, handler, root } = this
   const handlerContext = createHandlerContext(this, target, prop, val, receiver)
-  const { value } = handlerContext
+  const { value, path } = handlerContext
   const result = handler(handlerContext)
 
-  if (result === PROXY && typeof value === 'object') {
-    return new DeepProxy(value, handler, [prop as string], root)
+  if (
+    result === PROXY &&
+    (typeof value === 'object' || typeof value === 'function')
+  ) {
+    return new DeepProxy(value, handler, [...path, prop as string], root)
   }
 
   if (result === DEFAULT) {

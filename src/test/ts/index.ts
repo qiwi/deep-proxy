@@ -140,4 +140,38 @@ describe('DeepProxy', () => {
     expect(proxy.fn.inner()).toBe('INNER')
     expect(proxy.fn.inner.baz).toBe('baz')
   })
+
+  describe('directives', () => {
+    describe('PROXY', () => {
+      it('builds proper context on chaining', () => {
+        const target = { foo: { bar: { baz: 'qux' } } }
+        const proxy = new DeepProxy(
+          target,
+          ({ trapName, target, root, key, value, PROXY, DEFAULT, path }) => {
+            if (trapName === 'get') {
+              if (typeof value === 'object' && value !== null) {
+                return PROXY
+              }
+
+              return {
+                path,
+                key,
+                target,
+                root,
+              }
+            }
+
+            return DEFAULT
+          },
+        )
+
+        expect(proxy.foo.bar.baz).toEqual({
+          path: ['foo', 'bar'],
+          key: 'baz',
+          target: target.foo.bar,
+          root: target,
+        })
+      })
+    })
+  })
 })
