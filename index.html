@@ -67,10 +67,10 @@
 				</a>
 				<p>Deep proxy implementation for TypeScript based on a single trapper.</p>
 				<p><a href="https://travis-ci.com/qiwi/deep-proxy"><img src="https://travis-ci.com/qiwi/deep-proxy.svg?branch=master" alt="Build Status"></a>
-					<img src="https://img.shields.io/david/qiwi/deep-proxy" alt="David">
+					<a href="https://david-dm.org/qiwi/deep-proxy"><img src="https://img.shields.io/david/qiwi/deep-proxy" alt="David"></a>
 					<a href="https://codeclimate.com/github/qiwi/deep-proxy/maintainability"><img src="https://api.codeclimate.com/v1/badges/b8bb8d6c35bc74c123a5/maintainability" alt="Maintainability"></a>
 					<a href="https://codeclimate.com/github/qiwi/deep-proxy/test_coverage"><img src="https://api.codeclimate.com/v1/badges/b8bb8d6c35bc74c123a5/test_coverage" alt="Test Coverage"></a>
-				<img src="https://img.shields.io/npm/v/@qiwi/deep-proxy" alt="npm (scoped)"></p>
+				<a href="https://www.npmjs.com/package/@qiwi/deep-proxy"><img src="https://img.shields.io/npm/v/@qiwi/deep-proxy" alt="npm (scoped)"></a></p>
 				<a href="#install" id="install" style="color: inherit; text-decoration: none;">
 					<h2>Install</h2>
 				</a>
@@ -82,7 +82,7 @@ yarn add @qiwi/deep-proxy</code></pre>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {DeepProxy} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@qiwi/deep-proxy&#x27;</span>
 
 <span class="hljs-keyword">const</span> target = {foo: <span class="hljs-string">&#x27;bar&#x27;</span>, a: {b: <span class="hljs-string">&#x27;c&#x27;</span>}}
-<span class="hljs-keyword">const</span> proxy = <span class="hljs-keyword">new</span> DeepProxy(target, <span class="hljs-function">(<span class="hljs-params">{trapName, value, key, DEFAULT, NEXT}: <span class="hljs-built_in">any</span> = {}</span>) =&gt;</span> {
+<span class="hljs-keyword">const</span> proxy = <span class="hljs-keyword">new</span> DeepProxy(target, <span class="hljs-function">(<span class="hljs-params">{trapName, value, key, DEFAULT, NEXT}: THandlerContext</span>) =&gt;</span> {
   <span class="hljs-keyword">if</span> (trapName === <span class="hljs-string">&#x27;set&#x27;</span>) {
     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">&#x27;target is immutable&#x27;</span>)
   }
@@ -107,6 +107,9 @@ proxy.a.b       <span class="hljs-comment">// qux</span>
 proxy.bar       <span class="hljs-comment">// qux</span>
 proxy.d         <span class="hljs-comment">// baz</span>
 proxy.a = <span class="hljs-string">&#x27;a&#x27;</span>   <span class="hljs-comment">// TypeError</span></code></pre>
+				<p>FP adepts may use <code>createDeepProxy</code> factory instead of <code>DeepProxy</code> class. Note, the <code>handler</code> goes as the first argument.</p>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> {createDeepProxy} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@qiwi/deep-proxy&#x27;</span>
+<span class="hljs-keyword">const</span> proxy = createDeepProxy(<span class="hljs-function">(<span class="hljs-params">{DEFAULT}</span>) =&gt;</span> DEFAULT, target)</code></pre>
 				<p>All the traps follows to the single handler, so you&#39;re able to build various complex conditions in one place. This approach might be useful if need some kind of &quot;rich&quot; model, but don&#39;t want to complicate DTO.  </p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">if</span> (path.length &gt; <span class="hljs-number">10</span>) {
   <span class="hljs-keyword">if</span> (prop === <span class="hljs-string">&#x27;foo&#x27;</span> || [<span class="hljs-string">&#x27;get&#x27;</span>, <span class="hljs-string">&#x27;set&#x27;</span>, <span class="hljs-string">&#x27;ownKeys&#x27;</span>].includes(trapName)) {
@@ -203,7 +206,7 @@ proxy.a = <span class="hljs-string">&#x27;a&#x27;</span>   <span class="hljs-com
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-not-exported">
-						<a href="modules/reflection-53.html">&lt;em&gt;<wbr>Module&lt;/em&gt;</a>
+						<a href="modules/reflection-60.html">&lt;em&gt;<wbr>Module&lt;/em&gt;</a>
 					</li>
 				</ul>
 			</nav>
