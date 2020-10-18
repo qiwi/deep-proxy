@@ -18,6 +18,7 @@ export type TTraps = {
 export type THandlerContext<T extends TTarget> = {
   target: T
   trapName: TTrapName,
+  traps: TTraps,
   root: TTarget,
   args: any[],
   path: string[],
@@ -27,6 +28,7 @@ export type THandlerContext<T extends TTarget> = {
   handler: TProxyHandler, // eslint-disable-line
   PROXY: symbol,
   DEFAULT: symbol,
+  proxy: TTarget
 }
 
 export type TProxyHandler = <T>(proxyContext: THandlerContext<T>) => any
@@ -36,6 +38,7 @@ export type TTrapContext = {
   root: TTarget
   handler: TProxyHandler
   path: string[]
+  traps: TTraps
 }
 
 export const DEFAULT = Symbol('default')
@@ -63,6 +66,8 @@ const trapsWithKey = [
   'getOwnPropertyDescriptor',
 ]
 
+const refs = new WeakMap()
+
 const createHandlerContext = <T>(
   trapContext: TTrapContext,
   target: T,
@@ -70,7 +75,7 @@ const createHandlerContext = <T>(
   val?: any,
   receiver?: any,
 ) => {
-  const { path, root, trapName, handler } = trapContext
+  const { path, root, trapName, handler, traps } = trapContext
   const args = [target, prop, val, receiver]
   const key = trapsWithKey.includes(trapName) ? prop : undefined
   const value = key && target[key]
@@ -79,6 +84,7 @@ const createHandlerContext = <T>(
   return {
     args,
     trapName,
+    traps,
     path,
     root,
     target,
@@ -88,6 +94,9 @@ const createHandlerContext = <T>(
     handler,
     PROXY,
     DEFAULT,
+    get proxy() {
+      return refs.get(traps)
+    }
   }
 }
 
@@ -117,7 +126,7 @@ const trap = function <T extends TTarget>(
 
 const createTraps = (root: TTarget, handler: TProxyHandler, path: string[]) =>
   trapNames.reduce((traps, trapName): TTraps => {
-    traps[trapName] = trap.bind({ path, root, trapName, handler })
+    traps[trapName] = trap.bind({path, root, trapName, handler, traps})
     return traps
   }, {} as TTraps) as ProxyHandler<TTarget>
 
@@ -128,6 +137,11 @@ export const DeepProxy = class <T extends TTarget> {
     path: string[] = [],
     root: TTarget = target,
   ) {
-    return new Proxy(target, createTraps(root, handler, path))
+    const traps = createTraps(root, handler, path)
+    const proxy = new Proxy(target, traps)
+
+    refs.set(traps, proxy)
+
+    return proxy
   }
 } as DeepProxyConstructor

@@ -91,6 +91,7 @@ Metrics, debugging, throttling — all becomes better with deep proxy.
 type THandlerContext<T extends TTarget> = {
   target: T
   trapName: TTrapName,
+  traps: TTraps,
   root: TTarget,
   args: any[],
   path: string[],
@@ -100,6 +101,7 @@ type THandlerContext<T extends TTarget> = {
   handler: TProxyHandler,
   PROXY: symbol,
   DEFAULT: symbol,
+  proxy: TTarget // self-proxy ref
 }
 ```
 
