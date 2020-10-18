@@ -52,7 +52,7 @@ describe('DeepProxy', () => {
         PROXY,
         root,
         path,
-        proxy: _proxy
+        proxy: _proxy,
       }: any = {}) => {
         if (trapName === 'set') {
           expect(value).toBe('bar')
@@ -85,39 +85,49 @@ describe('DeepProxy', () => {
 
   it('proxy could be applied to complex function-with-props targets', () => {
     // eslint-disable-next-line
-    const wrapper = <T extends ICallable>(fn: T) => function (this: any, ...args: Parameters<T>) { return (fn.call(this, ...args) + '').toUpperCase() }
+    const wrapper = <T extends ICallable>(fn: T) =>
+      function (this: any, ...args: Parameters<T>) {
+        return (fn.call(this, ...args) + '').toUpperCase()
+      }
     const fn = function () {
       // @ts-ignore
       return this.foo
     }
     const target = {
       fn,
-      foo: 'foo'
+      foo: 'foo',
     }
-    const inner = function () { return 'inner' }
+    const inner = function () {
+      return 'inner'
+    }
     inner.baz = 'baz'
-    fn.bar = {baz: 'qux'}
+    fn.bar = { baz: 'qux' }
     fn.inner = inner
 
     const proxy = new DeepProxy(
       target,
       ({
-         trapName,
-         value,
-         handler,
-         DEFAULT,
-         PROXY,
-         root,
-         path,
-         proxy
-       }: any = {}) => {
+        trapName,
+        value,
+        handler,
+        DEFAULT,
+        PROXY,
+        root,
+        path,
+        proxy,
+      }: any = {}) => {
         if (trapName === 'get') {
           if (typeof value === 'object' && value !== null) {
             return PROXY
           }
 
           if (typeof value === 'function') {
-            return new DeepProxy(Object.assign(wrapper(value).bind(proxy), value), handler, path, root)
+            return new DeepProxy(
+              Object.assign(wrapper(value).bind(proxy), value),
+              handler,
+              path,
+              root,
+            )
           }
         }
 

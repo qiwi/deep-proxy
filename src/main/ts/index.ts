@@ -17,17 +17,17 @@ export type TTraps = {
 
 export type THandlerContext<T extends TTarget> = {
   target: T
-  trapName: TTrapName,
-  traps: TTraps,
-  root: TTarget,
-  args: any[],
-  path: string[],
-  value: any,
-  newValue?: any,
-  key?: keyof T,
-  handler: TProxyHandler, // eslint-disable-line
-  PROXY: symbol,
-  DEFAULT: symbol,
+  trapName: TTrapName
+  traps: TTraps
+  root: TTarget
+  args: any[]
+  path: string[]
+  value: any
+  newValue?: any
+  key?: keyof T
+  handler: TProxyHandler // eslint-disable-line
+  PROXY: symbol
+  DEFAULT: symbol
   proxy: TTarget
 }
 
@@ -49,7 +49,7 @@ export interface DeepProxyConstructor {
     target: T,
     handler: TProxyHandler,
     path?: string[],
-    root?: TTarget
+    root?: TTarget,
   ): T
 }
 
@@ -96,7 +96,7 @@ const createHandlerContext = <T>(
     DEFAULT,
     get proxy() {
       return refs.get(traps)
-    }
+    },
   }
 }
 
@@ -126,11 +126,11 @@ const trap = function <T extends TTarget>(
 
 const createTraps = (root: TTarget, handler: TProxyHandler, path: string[]) =>
   trapNames.reduce((traps, trapName): TTraps => {
-    traps[trapName] = trap.bind({path, root, trapName, handler, traps})
+    traps[trapName] = trap.bind({ path, root, trapName, handler, traps })
     return traps
   }, {} as TTraps) as ProxyHandler<TTarget>
 
-export const DeepProxy = class <T extends TTarget> {
+export const DeepProxy = class<T extends TTarget> {
   constructor(
     target: T,
     handler: TProxyHandler,
