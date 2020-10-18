@@ -36,11 +36,12 @@
     "url": "https://github.com/qiwi/deep-proxy.git"
   },
   "keywords": [
-    "nested",
+    "proxy",
     "deep",
+    "nested",
+    "chained",
     "deep-proxy",
-    "nexted-proxy",
-    "proxy"
+    "nested-proxy"
   ],
   "files": [
     "README.md",

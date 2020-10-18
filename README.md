@@ -50,7 +50,7 @@ import {createDeepProxy} from '@qiwi/deep-proxy'
 const proxy = createDeepProxy(({DEFAULT}) => DEFAULT, target)
 ```
 
-All the traps follows to the single handler, so you're able to build various complex conditions in one place. This approach might be useful if need some kind of "rich" model, but don't want to complicate DTO.  
+All the traps follow to the single handler, so you're able to build various complex conditions in one place. This approach might be useful if you need some kind of "rich" model, but don't want to complicate DTO.  
 ```typescript
 if (path.length > 10) {
   if (prop === 'foo' || ['get', 'set', 'ownKeys'].includes(trapName)) {
@@ -120,8 +120,11 @@ type THandlerContext<T extends TTarget> = {
 Proxies are [slow](https://github.com/justinjmoses/node-es6-proxy-benchmark). [Very slow](https://thecodebarbarian.com/thoughts-on-es6-proxies-performance). Use them wisely with care.
 
 ## Alternatives & refs
-* [samvv/js-proxy-deep](https://github.com/samvv/js-proxy-deep)
 * [tc39.es/proxy-object](https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots)
+* [stackoverflow/how-to-create-a-deep-proxy](https://stackoverflow.com/questions/43177855/how-to-create-a-deep-proxy)
+* [samvv/js-proxy-deep](https://github.com/samvv/js-proxy-deep)
+* [lukigarazus/deep-proxy](https://github.com/lukigarazus/deep-proxy)
+* [cronvel/nested-proxies](https://github.com/cronvel/nested-proxies)
 
 ## License
 [MIT](./LICENSE)
