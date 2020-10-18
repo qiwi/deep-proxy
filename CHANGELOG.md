@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/qiwi/deep-proxy/compare/v1.0.2...v1.1.0) (2020-10-18)
+
+
+### Features
+
+* add handler self-ref to handler context ([f1bd585](https://github.com/qiwi/deep-proxy/commit/f1bd58510bd0273a4fee3c0d17ee3d3887fa5afd))
+
 ## [1.0.2](https://github.com/qiwi/deep-proxy/compare/v1.0.1...v1.0.2) (2020-10-16)
 
 
