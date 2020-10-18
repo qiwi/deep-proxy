@@ -149,3 +149,10 @@ export const DeepProxy = class<T extends TTarget> {
     return proxy
   }
 } as DeepProxyConstructor
+
+export const createDeepProxy = <T extends TTarget>(
+  handler: TProxyHandler,
+  target: T,
+  path?: string[],
+  root?: TTarget,
+): T => new DeepProxy(target, handler, path, root)

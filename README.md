@@ -44,6 +44,11 @@ proxy.bar       // qux
 proxy.d         // baz
 proxy.a = 'a'   // TypeError
 ```
+FP adepts may use `createDeepProxy` factory instead of `DeepProxy` class. Note, the `handler` goes as the first argument.
+```ts
+import {createDeepProxy} from '@qiwi/deep-proxy'
+const proxy = createDeepProxy(({DEFAULT}) => DEFAULT, target)
+```
 
 All the traps follows to the single handler, so you're able to build various complex conditions in one place. This approach might be useful if need some kind of "rich" model, but don't want to complicate DTO.  
 ```typescript

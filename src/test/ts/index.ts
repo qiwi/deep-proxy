@@ -1,7 +1,30 @@
 import { ICallable } from '@qiwi/substrate'
 import util from 'util'
 
-import { DeepProxy, DEFAULT, PROXY } from '../../main/ts'
+import {
+  createDeepProxy,
+  DeepProxy,
+  DEFAULT,
+  PROXY,
+  TProxyHandler,
+} from '../../main/ts'
+
+const simpleNestHandler: TProxyHandler = ({
+  trapName,
+  value,
+  DEFAULT,
+  PROXY,
+}) => {
+  if (
+    trapName === 'get' &&
+    ((typeof value === 'object' && value !== null) ||
+      typeof value === 'function')
+  ) {
+    return PROXY
+  }
+
+  return DEFAULT
+}
 
 describe('DeepProxy', () => {
   it('works exactly like in usage example', () => {
@@ -182,20 +205,7 @@ describe('DeepProxy', () => {
         }
         foo.foo = 'foo.foo'
 
-        const proxy = new DeepProxy(
-          target,
-          ({ trapName, value, PROXY, DEFAULT }) => {
-            if (
-              trapName === 'get' &&
-              ((typeof value === 'object' && value !== null) ||
-                typeof value === 'function')
-            ) {
-              return PROXY
-            }
-
-            return DEFAULT
-          },
-        )
+        const proxy = new DeepProxy(target, simpleNestHandler)
 
         expect(proxy.foo()).toBe('foo')
         expect(proxy.foo.foo).toBe('foo.foo')
@@ -203,5 +213,15 @@ describe('DeepProxy', () => {
         expect(proxy.null).toBeNull()
       })
     })
+  })
+})
+
+describe('createDeepProxy', () => {
+  it('factory returns proper result', () => {
+    const target = { foo: { bar: { baz: 'qux' } } }
+    const proxy = createDeepProxy(simpleNestHandler, target)
+
+    expect(proxy.foo.bar.baz).toBe('qux')
+    expect(util.types.isProxy(proxy)).toBeTruthy()
   })
 })
