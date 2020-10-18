@@ -1,9 +1,9 @@
 // eslint-disable-next-line
-type TTarget = object & Record<any, any>
+export type TTarget = (object | Function) & Record<any, any>
 
-type TTrapName = keyof typeof Reflect
+export type TTrapName = keyof typeof Reflect
 
-type TTrap = <T extends TTarget>(
+export type TTrap = <T extends TTarget>(
   target: T,
   prop: keyof T,
   val: any,
@@ -11,17 +11,27 @@ type TTrap = <T extends TTarget>(
 ) => any
 
 // https://github.com/microsoft/TypeScript/issues/24220
-type TTraps = {
+export type TTraps = {
   [key in TTrapName]: TTrap
 }
 
-type THandlerContext<T> = {
+export type THandlerContext<T extends TTarget> = {
   target: T
-  trapName: TTrapName
+  trapName: TTrapName,
+  root: TTarget,
+  args: any[],
+  path: string[],
+  value: any,
+  newValue?: any,
+  key?: keyof T,
+  handler: TProxyHandler, // eslint-disable-line
+  PROXY: symbol,
+  DEFAULT: symbol,
 }
-type TProxyHandler = <T>(proxyContext: THandlerContext<T>) => any
 
-type TTrapContext = {
+export type TProxyHandler = <T>(proxyContext: THandlerContext<T>) => any
+
+export type TTrapContext = {
   trapName: TTrapName
   root: TTarget
   handler: TProxyHandler
@@ -60,7 +70,7 @@ const createHandlerContext = <T>(
   val?: any,
   receiver?: any,
 ) => {
-  const { path, root, trapName } = trapContext
+  const { path, root, trapName, handler } = trapContext
   const args = [target, prop, val, receiver]
   const key = trapsWithKey.includes(trapName) ? prop : undefined
   const value = key && target[key]
@@ -75,6 +85,7 @@ const createHandlerContext = <T>(
     value,
     newValue,
     key,
+    handler,
     PROXY,
     DEFAULT,
   }

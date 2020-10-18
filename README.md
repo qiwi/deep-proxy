@@ -63,7 +63,7 @@ Another example. Imagine a client which uses an unstable channel with 10% of los
 const client = createClient({...opts})
 await client.foo(...args) // 90% of success
 
-const clientWithRetry = new DeepProxy(client, ({value, trapName}) => {
+const clientWithRetry = new DeepProxy(client, ({value, trapName}: THandlerContext) => {
   if (trapName === 'get') {
     if (typeof value === 'function') {
       return retryify(value, 2)
@@ -85,6 +85,23 @@ Metrics, debugging, throttling — all becomes better with deep proxy.
 |---|---
 |`DEFAULT`| Returns standard flow control. The current operation (get, set, ownKeys, etc) will be performed as without proxy.
 |`PROXY`| Returns a proxy of nested object with parent's proxy handler.
+
+## THandlerContext
+```ts
+type THandlerContext<T extends TTarget> = {
+  target: T
+  trapName: TTrapName,
+  root: TTarget,
+  args: any[],
+  path: string[],
+  value: any,
+  newValue?: any,
+  key?: keyof T,
+  handler: TProxyHandler,
+  PROXY: symbol,
+  DEFAULT: symbol,
+}
+```
 
 ## Note
 Proxies are [slow](https://github.com/justinjmoses/node-es6-proxy-benchmark). [Very slow](https://thecodebarbarian.com/thoughts-on-es6-proxies-performance). Use them wisely with care.
