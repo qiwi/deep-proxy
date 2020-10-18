@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/qiwi/deep-proxy/compare/v1.3.0...v1.3.1) (2020-10-18)
+
+
+### Bug Fixes
+
+* **readme:** fix inaccuracies and typos ([4767ae5](https://github.com/qiwi/deep-proxy/commit/4767ae5292566ed47b3a98471521b3e7083ccddd))
+
 # [1.3.0](https://github.com/qiwi/deep-proxy/compare/v1.2.1...v1.3.0) (2020-10-18)
 
 
