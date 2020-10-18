@@ -110,7 +110,7 @@ proxy.a = <span class="hljs-string">&#x27;a&#x27;</span>   <span class="hljs-com
 				<p>FP adepts may use <code>createDeepProxy</code> factory instead of <code>DeepProxy</code> class. Note, the <code>handler</code> goes as the first argument.</p>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> {createDeepProxy} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@qiwi/deep-proxy&#x27;</span>
 <span class="hljs-keyword">const</span> proxy = createDeepProxy(<span class="hljs-function">(<span class="hljs-params">{DEFAULT}</span>) =&gt;</span> DEFAULT, target)</code></pre>
-				<p>All the traps follows to the single handler, so you&#39;re able to build various complex conditions in one place. This approach might be useful if need some kind of &quot;rich&quot; model, but don&#39;t want to complicate DTO.  </p>
+				<p>All the traps follow to the single handler, so you&#39;re able to build various complex conditions in one place. This approach might be useful if you need some kind of &quot;rich&quot; model, but don&#39;t want to complicate DTO.  </p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">if</span> (path.length &gt; <span class="hljs-number">10</span>) {
   <span class="hljs-keyword">if</span> (prop === <span class="hljs-string">&#x27;foo&#x27;</span> || [<span class="hljs-string">&#x27;get&#x27;</span>, <span class="hljs-string">&#x27;set&#x27;</span>, <span class="hljs-string">&#x27;ownKeys&#x27;</span>].includes(trapName)) {
     <span class="hljs-keyword">return</span> DEFAULT
@@ -190,8 +190,11 @@ proxy.a = <span class="hljs-string">&#x27;a&#x27;</span>   <span class="hljs-com
 					<h2>Alternatives &amp; refs</h2>
 				</a>
 				<ul>
-					<li><a href="https://github.com/samvv/js-proxy-deep">samvv/js-proxy-deep</a></li>
 					<li><a href="https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots">tc39.es/proxy-object</a></li>
+					<li><a href="https://stackoverflow.com/questions/43177855/how-to-create-a-deep-proxy">stackoverflow/how-to-create-a-deep-proxy</a></li>
+					<li><a href="https://github.com/samvv/js-proxy-deep">samvv/js-proxy-deep</a></li>
+					<li><a href="https://github.com/lukigarazus/deep-proxy">lukigarazus/deep-proxy</a></li>
+					<li><a href="https://github.com/cronvel/nested-proxies">cronvel/nested-proxies</a></li>
 				</ul>
 				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
 					<h2>License</h2>
