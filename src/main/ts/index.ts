@@ -16,7 +16,7 @@ export type TTraps = {
 }
 
 export type TRootContext = {
-  target: TTarget
+  targets: WeakMap<TTarget, TTarget>
   proxies: Map<string, TTarget>
 }
 
@@ -79,8 +79,9 @@ const createHandlerContext = <T>(
   val?: any,
   receiver?: any,
 ) => {
-  const { path, rootContext, trapName, handler, traps } = trapContext
   const args = [target, prop, val, receiver]
+  const { path, rootContext, trapName, handler, traps } = trapContext
+  const { proxies, targets } = rootContext
   const key = trapsWithKey.includes(trapName) ? prop : undefined
   const value = key && target[key]
   const newValue = trapName === 'set' ? val : undefined
@@ -92,7 +93,7 @@ const createHandlerContext = <T>(
     path,
     rootContext,
     get root() {
-      return rootContext.target
+      return targets.get(proxies.get('[]') as TTarget) as TTarget
     },
     target,
     value,
@@ -102,7 +103,7 @@ const createHandlerContext = <T>(
     PROXY,
     DEFAULT,
     get proxy() {
-      return rootContext.proxies.get(path.join('.')) as TTarget
+      return proxies.get(getPathHash(path)) as TTarget
     },
   }
 }
@@ -123,7 +124,7 @@ const trap = function <T extends TTarget>(
     return new DeepProxy(
       value as TTarget,
       handler,
-      key ? [...path, key as string] : path,
+      [...path, key as string],
       rootContext,
     )
   }
@@ -146,9 +147,9 @@ const createTraps = (
     return traps
   }, {} as TTraps) as ProxyHandler<TTarget>
 
-export const createRootContext = (target: TTarget): TRootContext => {
+export const createRootContext = (): TRootContext => {
   return {
-    target,
+    targets: new WeakMap(),
     proxies: new Map(),
   }
 }
@@ -164,26 +165,34 @@ const checkTarget = (target: any): void => {
   }
 }
 
+const getPathHash = (path: string[]): string => JSON.stringify(path)
+
 export const DeepProxy = class<T extends TTarget> {
   constructor(
     target: T,
     handler: TProxyHandler,
     path: string[] = [],
-    rootContext: TRootContext = createRootContext(target),
+    rootContext: TRootContext = createRootContext(),
   ) {
     checkTarget(target)
 
-    const pathJoined = path.join('.')
-    const _proxy = rootContext.proxies.get(pathJoined)
+    const hash = getPathHash(path)
+    const { proxies, targets } = rootContext
+    const _proxy = proxies.get(hash)
 
     if (_proxy) {
-      return _proxy
+      if (target === targets.get(_proxy)) {
+        return _proxy
+      }
+
+      proxies.delete(hash)
     }
 
     const traps = createTraps(rootContext, handler, path)
     const proxy = new Proxy(target, traps)
 
-    rootContext.proxies.set(pathJoined, proxy)
+    proxies.set(hash, proxy)
+    targets.set(proxy, target)
 
     return proxy
   }
