@@ -132,6 +132,7 @@ Proxies are [slow](https://github.com/justinjmoses/node-es6-proxy-benchmark). [V
 * [samvv/js-proxy-deep](https://github.com/samvv/js-proxy-deep)
 * [lukigarazus/deep-proxy](https://github.com/lukigarazus/deep-proxy)
 * [cronvel/nested-proxies](https://github.com/cronvel/nested-proxies)
+* [CharlesStover/deep-proxy-polyfill](CharlesStover/deep-proxy-polyfill)
 
 ## License
 [MIT](./LICENSE)
