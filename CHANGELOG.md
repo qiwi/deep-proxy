@@ -1,3 +1,16 @@
+# [1.4.0](https://github.com/qiwi/deep-proxy/compare/v1.3.1...v1.4.0) (2020-10-20)
+
+
+### Bug Fixes
+
+* **typings:** update DeepProxyConstructor iface ([185426f](https://github.com/qiwi/deep-proxy/commit/185426fbca994ea5ce5d9dec4163bbb0e746ae6e))
+* check proxy target type ([e1a68e5](https://github.com/qiwi/deep-proxy/commit/e1a68e5ca915e0d2aab33aab73be694dab84d262))
+
+
+### Features
+
+* provide nested proxies caching ([ae54a7f](https://github.com/qiwi/deep-proxy/commit/ae54a7f89a1fbc20f8c17737bc0c94598fb985d6)), closes [#9](https://github.com/qiwi/deep-proxy/issues/9)
+
 ## [1.3.1](https://github.com/qiwi/deep-proxy/compare/v1.3.0...v1.3.1) (2020-10-18)
 
 
