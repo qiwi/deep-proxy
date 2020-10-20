@@ -107,19 +107,19 @@ Metrics, debugging, throttling — all becomes better with deep proxy.
 ## THandlerContext
 ```ts
 type THandlerContext<T extends TTarget> = {
-  target: T
-  trapName: TTrapName,
-  traps: TTraps,
-  root: TTarget,
-  args: any[],
-  path: string[],
-  value: any,
-  newValue?: any,
-  key?: keyof T,
-  handler: TProxyHandler,
-  PROXY: symbol,
-  DEFAULT: symbol,
-  proxy: TTarget // self-proxy ref
+  target: T               // proxy target object/function
+  trapName: TTrapName     // proxy handler trap: get, set, ownKeys and so on
+  traps: TTraps           // proxy handler map reference
+  root: TTarget           // root level proxy's target
+  args: any[]             // trap method arguments as is
+  path: string[]          // path to current proxy
+  key?: keyof T           // prop key if defined in trap args
+  value: any              // current field value by key
+  newValue?: any          // new assinged value (#set())
+  handler: TProxyHandler  // handler reference
+  PROXY: symbol           // directives
+  DEFAULT: symbol
+  proxy: TTarget          // proxy reference
 }
 ```
 
