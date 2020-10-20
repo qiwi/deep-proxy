@@ -72,8 +72,6 @@ const trapsWithKey = [
   'getOwnPropertyDescriptor',
 ]
 
-// const refs = new WeakMap()
-
 const createHandlerContext = <T>(
   trapContext: TTrapContext,
   target: T,
