@@ -55,7 +55,7 @@ export interface DeepProxyConstructor {
     target: T,
     handler: TProxyHandler,
     path?: string[],
-    root?: TTarget,
+    rootContext?: TRootContext,
   ): T
 }
 
