@@ -6,14 +6,12 @@ export type TTrapName = keyof typeof Reflect
 export type TTrap = <T extends TTarget>(
   target: T,
   prop: keyof T,
-  val: any,
-  receiver: any,
+  val?: any,
+  receiver?: any,
 ) => any
 
 // https://github.com/microsoft/TypeScript/issues/24220
-export type TTraps = {
-  [key in TTrapName]: TTrap
-}
+export type TTraps = ProxyHandler<TTarget>
 
 export type TSharedContext = {
   targets: WeakMap<TTarget, TTarget>
@@ -54,7 +52,6 @@ export type TCreatorThis = {
 }
 
 export const DEFAULT = Symbol('default')
-export const PROXY = Symbol('proxy')
 
 export interface DeepProxyConstructor {
   new <T extends TTarget>(
@@ -84,7 +81,7 @@ const createHandlerContext = <T>(
   prop?: keyof T,
   val?: any,
   receiver?: any,
-) => {
+): THandlerContext<T> => {
   const args = [target, prop, val, receiver]
   const { path, trapName, handler, traps, sharedContext } = trapContext
   const { proxies, targets } = sharedContext
@@ -121,9 +118,9 @@ const createHandlerContext = <T>(
 const trap = function <T extends TTarget>(
   this: TTrapContext,
   target: T,
-  prop: keyof T,
-  val: any,
-  receiver: any,
+  prop?: keyof T,
+  val?: any,
+  receiver?: any,
 ) {
   const { trapName, handler } = this
   const handlerContext = createHandlerContext(this, target, prop, val, receiver)
@@ -147,7 +144,7 @@ const createTraps = (
   handler: TProxyHandler,
   path: string[],
 ) =>
-  trapNames.reduce((traps, trapName): TTraps => {
+  trapNames.reduce<TTraps>((traps, trapName) => {
     traps[trapName] = trap.bind({
       path,
       sharedContext,
@@ -156,7 +153,7 @@ const createTraps = (
       traps,
     })
     return traps
-  }, {} as TTraps) as ProxyHandler<TTarget>
+  }, {})
 
 export const createSharedContext = (): TSharedContext => ({
   targets: new WeakMap(),
@@ -201,7 +198,6 @@ export const createDeepProxy = function <T extends TTarget>(
       return _proxy
     }
 
-    proxies.delete(hash)
     targets.delete(_proxy)
   }
 
