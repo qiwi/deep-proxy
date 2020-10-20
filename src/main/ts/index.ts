@@ -121,13 +121,9 @@ const trap = function <T extends TTarget>(
   const { value, path, key } = handlerContext
   const result = handler(handlerContext)
 
-  if (
-    result === PROXY &&
-    ((typeof value === 'object' && value !== null) ||
-      typeof value === 'function')
-  ) {
+  if (result === PROXY) {
     return new DeepProxy(
-      value,
+      value as TTarget,
       handler,
       key ? [...path, key as string] : path,
       rootContext,
@@ -159,6 +155,17 @@ export const createRootContext = (target: TTarget): TRootContext => {
   }
 }
 
+const checkTarget = (target: any): void => {
+  if (
+    target === null ||
+    (typeof target !== 'object' && typeof target !== 'function')
+  ) {
+    throw new TypeError(
+      'Deep proxy could be applied to objects and functions only',
+    )
+  }
+}
+
 export const DeepProxy = class<T extends TTarget> {
   constructor(
     target: T,
@@ -166,6 +173,8 @@ export const DeepProxy = class<T extends TTarget> {
     path: string[] = [],
     rootContext: TRootContext = createRootContext(target),
   ) {
+    checkTarget(target)
+
     const pathJoined = path.join('.')
     const _proxy = rootContext.proxies.get(pathJoined)
 
@@ -186,5 +195,5 @@ export const createDeepProxy = <T extends TTarget>(
   handler: TProxyHandler,
   target: T,
   path?: string[],
-  root?: TTarget,
-): T => new DeepProxy(target, handler, path, root)
+  rootContext?: TRootContext,
+): T => new DeepProxy(target, handler, path, rootContext)

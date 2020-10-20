@@ -165,6 +165,13 @@ describe('DeepProxy', () => {
     expect(proxy.fn.inner.baz).toBe('baz')
   })
 
+  it('throws error on target type mismatch', () => {
+    // @ts-ignore
+    expect(() => new DeepProxy(undefined, simpleNestHandler)).toThrow(
+      'Deep proxy could be applied to objects and functions only',
+    )
+  })
+
   describe('directives', () => {
     describe('PROXY', () => {
       it('builds proper context on chaining', () => {
