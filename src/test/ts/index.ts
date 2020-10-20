@@ -5,7 +5,6 @@ import {
   createDeepProxy,
   DeepProxy,
   DEFAULT,
-  PROXY,
   TProxyHandler,
 } from '../../main/ts'
 
@@ -31,7 +30,7 @@ describe('DeepProxy', () => {
     const target = { foo: 'bar', a: { b: 'c' } }
     const proxy = new DeepProxy(
       target,
-      ({ trapName, value, key }: any = {}) => {
+      ({ trapName, value, key, PROXY }: any = {}) => {
         if (trapName === 'set') {
           throw new TypeError('target is immutable')
         }
@@ -62,6 +61,14 @@ describe('DeepProxy', () => {
     expect(proxy.a.d).toBe('baz')
   })
 
+  it('uses default handler, if 2nd arg is empty', () => {
+    const target = { foo: 'bar' }
+    const proxy = new DeepProxy(target)
+
+    expect(proxy.foo).toBe('bar')
+    expect(util.types.isProxy(proxy)).toBeTruthy()
+  })
+
   it('proxy handler gets proper context', (done) => {
     const target = { foo: 'bar' }
     const proxy = new DeepProxy(
@@ -84,7 +91,7 @@ describe('DeepProxy', () => {
           expect(root).toBe(target)
           expect(path).toEqual([])
           expect(typeof DEFAULT).toBe('symbol')
-          expect(typeof PROXY).toBe('symbol')
+          expect(typeof PROXY).toBe('function')
         }
 
         if (trapName === 'get') {
@@ -201,6 +208,25 @@ describe('DeepProxy', () => {
     expect(proxy1.foo).not.toBe(target.foo)
   })
 
+  it('updates shared context if target changes', () => {
+    const target = { foo: { bar: 'baz' } }
+    const sharedContext = { proxies: new Map(), targets: new WeakMap() }
+    const proxy = new DeepProxy(target, simpleNestHandler, [], sharedContext)
+    const foo1 = proxy.foo
+
+    expect(proxy.foo.bar).toBe('baz')
+    expect(foo1).toBe(proxy.foo)
+    expect(sharedContext.targets.get(foo1)).toBe(target.foo)
+    // @ts-ignore
+    proxy.foo = { baz: 'qux' }
+
+    const foo2 = proxy.foo
+    expect(foo2).toBe(proxy.foo)
+    expect(foo2).not.toBe(foo1)
+    expect(sharedContext.targets.get(foo2)).toBe(target.foo)
+    expect(sharedContext.targets.get(foo1)).toBeUndefined()
+  })
+
   describe('directives', () => {
     describe('PROXY', () => {
       it('builds proper context on chaining', () => {
@@ -232,6 +258,24 @@ describe('DeepProxy', () => {
           root: target,
         })
       })
+
+      it('can be used as function', () => {
+        const target = { foo: { bar: 'baz' } }
+        const proxy = new DeepProxy(target, ({ value, trapName, PROXY }) => {
+          if (
+            trapName === 'get' &&
+            typeof value === 'object' &&
+            value !== null
+          ) {
+            return PROXY({ baz: 'qux' })
+          }
+
+          return DEFAULT
+        })
+
+        // @ts-ignore
+        expect(proxy.foo.baz).toBe('qux')
+      })
     })
   })
 })
@@ -239,7 +283,7 @@ describe('DeepProxy', () => {
 describe('createDeepProxy', () => {
   it('factory returns proper result', () => {
     const target = { foo: { bar: { baz: 'qux' } } }
-    const proxy = createDeepProxy(simpleNestHandler, target)
+    const proxy = createDeepProxy(target, simpleNestHandler)
 
     expect(proxy.foo.bar.baz).toBe('qux')
     expect(util.types.isProxy(proxy)).toBeTruthy()

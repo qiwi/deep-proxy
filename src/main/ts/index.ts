@@ -32,7 +32,7 @@ export type THandlerContext<T extends TTarget> = {
   newValue?: any
   key?: keyof T
   handler: TProxyHandler // eslint-disable-line
-  PROXY: symbol
+  PROXY: typeof createDeepProxy // eslint-disable-line
   DEFAULT: symbol
   proxy: TTarget
 }
@@ -47,13 +47,19 @@ export type TTrapContext = {
   traps: TTraps
 }
 
+export type TCreatorThis = {
+  handler?: TProxyHandler
+  path?: string[]
+  sharedContext?: TSharedContext
+}
+
 export const DEFAULT = Symbol('default')
 export const PROXY = Symbol('proxy')
 
 export interface DeepProxyConstructor {
   new <T extends TTarget>(
     target: T,
-    handler: TProxyHandler,
+    handler?: TProxyHandler,
     path?: string[],
     sharedContext?: TSharedContext,
   ): T
@@ -99,7 +105,11 @@ const createHandlerContext = <T>(
     value,
     newValue,
     handler,
-    PROXY,
+    PROXY: createDeepProxy.bind({
+      handler,
+      path: [...path, key as string],
+      sharedContext,
+    }),
     DEFAULT,
     sharedContext,
     get proxy() {
@@ -115,18 +125,13 @@ const trap = function <T extends TTarget>(
   val: any,
   receiver: any,
 ) {
-  const { trapName, handler, sharedContext } = this
+  const { trapName, handler } = this
   const handlerContext = createHandlerContext(this, target, prop, val, receiver)
-  const { value, path, key } = handlerContext
+  const { PROXY, value } = handlerContext
   const result = handler(handlerContext)
 
   if (result === PROXY) {
-    return new DeepProxy(
-      value as TTarget,
-      handler,
-      [...path, key as string],
-      sharedContext,
-    )
+    return PROXY(value as TTarget)
   }
 
   if (result === DEFAULT) {
@@ -143,7 +148,13 @@ const createTraps = (
   path: string[],
 ) =>
   trapNames.reduce((traps, trapName): TTraps => {
-    traps[trapName] = trap.bind({ path, sharedContext, trapName, handler, traps })
+    traps[trapName] = trap.bind({
+      path,
+      sharedContext,
+      trapName,
+      handler,
+      traps,
+    })
     return traps
   }, {} as TTraps) as ProxyHandler<TTarget>
 
@@ -168,7 +179,7 @@ const getPathHash = (path: string[]): string => JSON.stringify(path)
 export const DeepProxy = class<T extends TTarget> {
   constructor(
     target: T,
-    handler: TProxyHandler,
+    handler: TProxyHandler | undefined = ({ DEFAULT }) => DEFAULT,
     path: string[] = [],
     sharedContext: TSharedContext = createSharedContext(),
   ) {
@@ -184,6 +195,7 @@ export const DeepProxy = class<T extends TTarget> {
       }
 
       proxies.delete(hash)
+      targets.delete(_proxy)
     }
 
     const traps = createTraps(sharedContext, handler, path)
@@ -196,9 +208,19 @@ export const DeepProxy = class<T extends TTarget> {
   }
 } as DeepProxyConstructor
 
-export const createDeepProxy = <T extends TTarget>(
-  handler: TProxyHandler,
+export const createDeepProxy = function <T extends TTarget>(
+  this: TCreatorThis | void,
   target: T,
+  handler?: TProxyHandler,
   path?: string[],
   sharedContext?: TSharedContext,
-): T => new DeepProxy(target, handler, path, sharedContext)
+): T {
+  const _this: TCreatorThis = { ...this }
+
+  return new DeepProxy(
+    target,
+    handler || _this.handler,
+    path || _this.path,
+    sharedContext || _this.sharedContext,
+  )
+}

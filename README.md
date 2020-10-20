@@ -25,7 +25,7 @@ yarn add @qiwi/deep-proxy
 import {DeepProxy} from '@qiwi/deep-proxy'
 
 const target = {foo: 'bar', a: {b: 'c'}}
-const proxy = new DeepProxy(target, ({trapName, value, key, DEFAULT, NEXT}: THandlerContext) => {
+const proxy = new DeepProxy(target, ({trapName, value, key, DEFAULT, PROXY}: THandlerContext) => {
   if (trapName === 'set') {
     throw new TypeError('target is immutable')
   }
@@ -51,10 +51,17 @@ proxy.bar       // qux
 proxy.d         // baz
 proxy.a = 'a'   // TypeError
 ```
-FP adepts may use `createDeepProxy` factory instead of `DeepProxy` class. Note, the `handler` goes as the first argument.
+FP adepts may use `createDeepProxy` factory instead of `DeepProxy` class and get some magic.
 ```ts
 import {createDeepProxy} from '@qiwi/deep-proxy'
-const proxy = createDeepProxy(({DEFAULT}) => DEFAULT, target)
+
+// Regular usage case
+const handler = ({DEFAULT}) => DEFAULT
+const proxy1 = createDeepProxy(target, handler)
+
+// Passing defaults through this context
+const customProxyFactory = createDeepProxy.bind({handler})
+const proxy2 = customProxyFactory(target)
 ```
 
 All the traps follow to the single handler, so you're able to build various complex conditions in one place. This approach might be useful if you need some kind of "rich" model, but don't want to complicate DTO.  
@@ -103,6 +110,18 @@ Metrics, debugging, throttling — all becomes better with deep proxy.
 |---|---
 |`DEFAULT`| Returns standard flow control. The current operation (get, set, ownKeys, etc) will be performed as without proxy.
 |`PROXY`| Returns a proxy of nested object with parent's proxy handler.
+
+A bit more sugar on top: by default `PROXY` directive uses `value` from context, but you can pass your own.
+```
+const proxy = new DeepProxy({foo: {bar: 'baz'}}, ({value, trapName}) => {
+  if (trapName === 'get' && typeof value === 'object' && value !== null) {
+    return PROXY({baz: 'qux'})
+  }
+
+  return DEFAULT
+})
+proxy.foo.baz // 'qux'
+```
 
 ## THandlerContext
 ```ts
