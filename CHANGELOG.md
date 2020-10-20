@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/qiwi/deep-proxy/compare/v1.4.0...v1.4.1) (2020-10-20)
+
+
+### Bug Fixes
+
+* **docs:** fix broken links ([9056ca1](https://github.com/qiwi/deep-proxy/commit/9056ca1ba2a6379bb62d47914ab8b3f64a74df0e))
+
 # [1.4.0](https://github.com/qiwi/deep-proxy/compare/v1.3.1...v1.4.0) (2020-10-20)
 
 
