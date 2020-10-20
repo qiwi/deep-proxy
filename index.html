@@ -65,7 +65,7 @@
 				<a href="#qiwideep-proxy" id="qiwideep-proxy" style="color: inherit; text-decoration: none;">
 					<h1>@qiwi/deep-proxy</h1>
 				</a>
-				<p>Deep proxy implementation for TypeScript based on a single trapper.</p>
+				<p>Deep proxy implementation for TypeScript</p>
 				<p><a href="https://travis-ci.com/qiwi/deep-proxy"><img src="https://travis-ci.com/qiwi/deep-proxy.svg?branch=master" alt="Build Status"></a>
 					<a href="https://david-dm.org/qiwi/deep-proxy"><img src="https://img.shields.io/david/qiwi/deep-proxy" alt="David"></a>
 					<a href="https://codeclimate.com/github/qiwi/deep-proxy/maintainability"><img src="https://api.codeclimate.com/v1/badges/b8bb8d6c35bc74c123a5/maintainability" alt="Maintainability"></a>
@@ -76,6 +76,16 @@
 				</a>
 				<pre><code class="language-shell">npm i @qiwi/deep-proxy
 yarn add @qiwi/deep-proxy</code></pre>
+				<a href="#key-features" id="key-features" style="color: inherit; text-decoration: none;">
+					<h2>Key features</h2>
+				</a>
+				<ul>
+					<li>Single proxy handler with rich context instead of trap map</li>
+					<li>Proxy self-reference in handler context (meaningful for methods binding)</li>
+					<li>JS, TS and Flow support</li>
+					<li>Directive shortcuts</li>
+					<li>Nested proxies caching</li>
+				</ul>
 				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
 					<h2>Usage</h2>
 				</a>
@@ -168,26 +178,26 @@ proxy.a = <span class="hljs-string">&#x27;a&#x27;</span>   <span class="hljs-com
 					<h2>THandlerContext</h2>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">type</span> THandlerContext&lt;T <span class="hljs-keyword">extends</span> TTarget&gt; = {
-  target: T
-  trapName: TTrapName,
-  traps: TTraps,
-  root: TTarget,
-  args: <span class="hljs-built_in">any</span>[],
-  path: <span class="hljs-built_in">string</span>[],
-  value: <span class="hljs-built_in">any</span>,
-  newValue?: <span class="hljs-built_in">any</span>,
-  key?: keyof T,
-  handler: TProxyHandler,
-  PROXY: symbol,
-  DEFAULT: symbol,
-  proxy: TTarget <span class="hljs-comment">// self-proxy ref</span>
+  target: T               <span class="hljs-comment">// proxy target object/function</span>
+  trapName: TTrapName     <span class="hljs-comment">// proxy handler trap: get, set, ownKeys and so on</span>
+  traps: TTraps           <span class="hljs-comment">// proxy handler map reference</span>
+  root: TTarget           <span class="hljs-comment">// root level proxy&#x27;s target</span>
+  args: <span class="hljs-built_in">any</span>[]             <span class="hljs-comment">// trap method arguments as is</span>
+  path: <span class="hljs-built_in">string</span>[]          <span class="hljs-comment">// path to current proxy</span>
+  key?: keyof T           <span class="hljs-comment">// prop key if defined in trap args</span>
+  value: <span class="hljs-built_in">any</span>              <span class="hljs-comment">// current field value by key</span>
+  newValue?: <span class="hljs-built_in">any</span>          <span class="hljs-comment">// new assinged value (#set())</span>
+  handler: TProxyHandler  <span class="hljs-comment">// handler reference</span>
+  PROXY: symbol           <span class="hljs-comment">// directives</span>
+  DEFAULT: symbol
+  proxy: TTarget          <span class="hljs-comment">// proxy reference</span>
 }</code></pre>
 				<a href="#note" id="note" style="color: inherit; text-decoration: none;">
 					<h2>Note</h2>
 				</a>
 				<p>Proxies are <a href="https://github.com/justinjmoses/node-es6-proxy-benchmark">slow</a>. <a href="https://thecodebarbarian.com/thoughts-on-es6-proxies-performance">Very slow</a>. Use them wisely with care.</p>
 				<a href="#alternatives-amp-refs" id="alternatives-amp-refs" style="color: inherit; text-decoration: none;">
-					<h2>Alternatives &amp; refs</h2>
+					<h2>Alternatives &amp; Refs</h2>
 				</a>
 				<ul>
 					<li><a href="https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots">tc39.es/proxy-object</a></li>
@@ -195,6 +205,7 @@ proxy.a = <span class="hljs-string">&#x27;a&#x27;</span>   <span class="hljs-com
 					<li><a href="https://github.com/samvv/js-proxy-deep">samvv/js-proxy-deep</a></li>
 					<li><a href="https://github.com/lukigarazus/deep-proxy">lukigarazus/deep-proxy</a></li>
 					<li><a href="https://github.com/cronvel/nested-proxies">cronvel/nested-proxies</a></li>
+					<li><a href="CharlesStover/deep-proxy-polyfill">CharlesStover/deep-proxy-polyfill</a></li>
 				</ul>
 				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
 					<h2>License</h2>
@@ -209,7 +220,7 @@ proxy.a = <span class="hljs-string">&#x27;a&#x27;</span>   <span class="hljs-com
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-not-exported">
-						<a href="modules/reflection-60.html">&lt;em&gt;<wbr>Module&lt;/em&gt;</a>
+						<a href="modules/reflection-67.html">&lt;em&gt;<wbr>Module&lt;/em&gt;</a>
 					</li>
 				</ul>
 			</nav>
