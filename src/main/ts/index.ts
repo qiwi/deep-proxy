@@ -15,7 +15,7 @@ export type TTraps = {
   [key in TTrapName]: TTrap
 }
 
-export type TRootContext = {
+export type TSharedContext = {
   targets: WeakMap<TTarget, TTarget>
   proxies: Map<string, TTarget>
 }
@@ -25,7 +25,7 @@ export type THandlerContext<T extends TTarget> = {
   trapName: TTrapName
   traps: TTraps
   root: TTarget
-  rootContext: TRootContext
+  sharedContext: TSharedContext
   args: any[]
   path: string[]
   value: any
@@ -41,7 +41,7 @@ export type TProxyHandler = <T>(proxyContext: THandlerContext<T>) => any
 
 export type TTrapContext = {
   trapName: TTrapName
-  rootContext: TRootContext
+  sharedContext: TSharedContext
   handler: TProxyHandler
   path: string[]
   traps: TTraps
@@ -55,7 +55,7 @@ export interface DeepProxyConstructor {
     target: T,
     handler: TProxyHandler,
     path?: string[],
-    rootContext?: TRootContext,
+    sharedContext?: TSharedContext,
   ): T
 }
 
@@ -80,8 +80,8 @@ const createHandlerContext = <T>(
   receiver?: any,
 ) => {
   const args = [target, prop, val, receiver]
-  const { path, rootContext, trapName, handler, traps } = trapContext
-  const { proxies, targets } = rootContext
+  const { path, trapName, handler, traps, sharedContext } = trapContext
+  const { proxies, targets } = sharedContext
   const key = trapsWithKey.includes(trapName) ? prop : undefined
   const value = key && target[key]
   const newValue = trapName === 'set' ? val : undefined
@@ -91,7 +91,6 @@ const createHandlerContext = <T>(
     trapName,
     traps,
     path,
-    rootContext,
     get root() {
       return targets.get(proxies.get('[]') as TTarget) as TTarget
     },
@@ -102,6 +101,7 @@ const createHandlerContext = <T>(
     handler,
     PROXY,
     DEFAULT,
+    sharedContext,
     get proxy() {
       return proxies.get(getPathHash(path)) as TTarget
     },
@@ -115,7 +115,7 @@ const trap = function <T extends TTarget>(
   val: any,
   receiver: any,
 ) {
-  const { trapName, handler, rootContext } = this
+  const { trapName, handler, sharedContext } = this
   const handlerContext = createHandlerContext(this, target, prop, val, receiver)
   const { value, path, key } = handlerContext
   const result = handler(handlerContext)
@@ -125,7 +125,7 @@ const trap = function <T extends TTarget>(
       value as TTarget,
       handler,
       [...path, key as string],
-      rootContext,
+      sharedContext,
     )
   }
 
@@ -138,21 +138,19 @@ const trap = function <T extends TTarget>(
 }
 
 const createTraps = (
-  rootContext: TRootContext,
+  sharedContext: TSharedContext,
   handler: TProxyHandler,
   path: string[],
 ) =>
   trapNames.reduce((traps, trapName): TTraps => {
-    traps[trapName] = trap.bind({ path, rootContext, trapName, handler, traps })
+    traps[trapName] = trap.bind({ path, sharedContext, trapName, handler, traps })
     return traps
   }, {} as TTraps) as ProxyHandler<TTarget>
 
-export const createRootContext = (): TRootContext => {
-  return {
-    targets: new WeakMap(),
-    proxies: new Map(),
-  }
-}
+export const createSharedContext = (): TSharedContext => ({
+  targets: new WeakMap(),
+  proxies: new Map(),
+})
 
 const checkTarget = (target: any): void => {
   if (
@@ -172,12 +170,12 @@ export const DeepProxy = class<T extends TTarget> {
     target: T,
     handler: TProxyHandler,
     path: string[] = [],
-    rootContext: TRootContext = createRootContext(),
+    sharedContext: TSharedContext = createSharedContext(),
   ) {
     checkTarget(target)
 
     const hash = getPathHash(path)
-    const { proxies, targets } = rootContext
+    const { proxies, targets } = sharedContext
     const _proxy = proxies.get(hash)
 
     if (_proxy) {
@@ -188,7 +186,7 @@ export const DeepProxy = class<T extends TTarget> {
       proxies.delete(hash)
     }
 
-    const traps = createTraps(rootContext, handler, path)
+    const traps = createTraps(sharedContext, handler, path)
     const proxy = new Proxy(target, traps)
 
     proxies.set(hash, proxy)
@@ -202,5 +200,5 @@ export const createDeepProxy = <T extends TTarget>(
   handler: TProxyHandler,
   target: T,
   path?: string[],
-  rootContext?: TRootContext,
-): T => new DeepProxy(target, handler, path, rootContext)
+  sharedContext?: TSharedContext,
+): T => new DeepProxy(target, handler, path, sharedContext)
