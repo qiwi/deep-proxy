@@ -176,37 +176,7 @@ const checkTarget = (target: any): void => {
 
 const getPathHash = (path: string[]): string => JSON.stringify(path)
 
-export const DeepProxy = class<T extends TTarget> {
-  constructor(
-    target: T,
-    handler: TProxyHandler | undefined = ({ DEFAULT }) => DEFAULT,
-    path: string[] = [],
-    sharedContext: TSharedContext = createSharedContext(),
-  ) {
-    checkTarget(target)
-
-    const hash = getPathHash(path)
-    const { proxies, targets } = sharedContext
-    const _proxy = proxies.get(hash)
-
-    if (_proxy) {
-      if (target === targets.get(_proxy)) {
-        return _proxy
-      }
-
-      proxies.delete(hash)
-      targets.delete(_proxy)
-    }
-
-    const traps = createTraps(sharedContext, handler, path)
-    const proxy = new Proxy(target, traps)
-
-    proxies.set(hash, proxy)
-    targets.set(proxy, target)
-
-    return proxy
-  }
-} as DeepProxyConstructor
+const defaultProxyHandler: TProxyHandler = ({ DEFAULT }) => DEFAULT
 
 export const createDeepProxy = function <T extends TTarget>(
   this: TCreatorThis | void,
@@ -215,12 +185,42 @@ export const createDeepProxy = function <T extends TTarget>(
   path?: string[],
   sharedContext?: TSharedContext,
 ): T {
-  const _this: TCreatorThis = { ...this }
+  checkTarget(target)
 
-  return new DeepProxy(
-    target,
-    handler || _this.handler,
-    path || _this.path,
-    sharedContext || _this.sharedContext,
-  )
+  const _this: TCreatorThis = { ...this }
+  const _handler = handler || _this.handler || defaultProxyHandler
+  const _path = path || _this.path || []
+  const _sharedContext =
+    sharedContext || _this.sharedContext || createSharedContext()
+  const hash = getPathHash(_path)
+  const { proxies, targets } = _sharedContext
+  const _proxy = proxies.get(hash)
+
+  if (_proxy) {
+    if (target === targets.get(_proxy)) {
+      return _proxy
+    }
+
+    proxies.delete(hash)
+    targets.delete(_proxy)
+  }
+
+  const traps = createTraps(_sharedContext, _handler, _path)
+  const proxy = new Proxy(target, traps)
+
+  proxies.set(hash, proxy)
+  targets.set(proxy, target)
+
+  return proxy
 }
+
+export const DeepProxy = class<T extends TTarget> {
+  constructor(
+    target: T,
+    handler?: TProxyHandler,
+    path?: string[],
+    sharedContext?: TSharedContext,
+  ) {
+    return createDeepProxy(target, handler, path, sharedContext)
+  }
+} as DeepProxyConstructor
