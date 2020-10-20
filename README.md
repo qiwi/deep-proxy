@@ -18,6 +18,7 @@ yarn add @qiwi/deep-proxy
 * Proxy self-reference in handler context (meaningful for methods binding)
 * JS, TS and Flow support
 * Directive shortcuts
+* Nested proxies caching
 
 ## Usage
 ```typescript
