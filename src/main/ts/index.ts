@@ -15,11 +15,17 @@ export type TTraps = {
   [key in TTrapName]: TTrap
 }
 
+export type TRootContext = {
+  target: TTarget
+  proxies: Map<string, TTarget>
+}
+
 export type THandlerContext<T extends TTarget> = {
   target: T
   trapName: TTrapName
   traps: TTraps
   root: TTarget
+  rootContext: TRootContext
   args: any[]
   path: string[]
   value: any
@@ -35,7 +41,7 @@ export type TProxyHandler = <T>(proxyContext: THandlerContext<T>) => any
 
 export type TTrapContext = {
   trapName: TTrapName
-  root: TTarget
+  rootContext: TRootContext
   handler: TProxyHandler
   path: string[]
   traps: TTraps
@@ -66,7 +72,7 @@ const trapsWithKey = [
   'getOwnPropertyDescriptor',
 ]
 
-const refs = new WeakMap()
+// const refs = new WeakMap()
 
 const createHandlerContext = <T>(
   trapContext: TTrapContext,
@@ -75,7 +81,7 @@ const createHandlerContext = <T>(
   val?: any,
   receiver?: any,
 ) => {
-  const { path, root, trapName, handler, traps } = trapContext
+  const { path, rootContext, trapName, handler, traps } = trapContext
   const args = [target, prop, val, receiver]
   const key = trapsWithKey.includes(trapName) ? prop : undefined
   const value = key && target[key]
@@ -86,7 +92,10 @@ const createHandlerContext = <T>(
     trapName,
     traps,
     path,
-    root,
+    rootContext,
+    get root() {
+      return rootContext.target
+    },
     target,
     value,
     newValue,
@@ -95,7 +104,7 @@ const createHandlerContext = <T>(
     PROXY,
     DEFAULT,
     get proxy() {
-      return refs.get(traps)
+      return rootContext.proxies.get(path.join('.')) as TTarget
     },
   }
 }
@@ -107,9 +116,9 @@ const trap = function <T extends TTarget>(
   val: any,
   receiver: any,
 ) {
-  const { trapName, handler, root } = this
+  const { trapName, handler, rootContext } = this
   const handlerContext = createHandlerContext(this, target, prop, val, receiver)
-  const { value, path } = handlerContext
+  const { value, path, key } = handlerContext
   const result = handler(handlerContext)
 
   if (
@@ -117,7 +126,12 @@ const trap = function <T extends TTarget>(
     ((typeof value === 'object' && value !== null) ||
       typeof value === 'function')
   ) {
-    return new DeepProxy(value, handler, [...path, prop as string], root)
+    return new DeepProxy(
+      value,
+      handler,
+      key ? [...path, key as string] : path,
+      rootContext,
+    )
   }
 
   if (result === DEFAULT) {
@@ -128,23 +142,41 @@ const trap = function <T extends TTarget>(
   return result
 }
 
-const createTraps = (root: TTarget, handler: TProxyHandler, path: string[]) =>
+const createTraps = (
+  rootContext: TRootContext,
+  handler: TProxyHandler,
+  path: string[],
+) =>
   trapNames.reduce((traps, trapName): TTraps => {
-    traps[trapName] = trap.bind({ path, root, trapName, handler, traps })
+    traps[trapName] = trap.bind({ path, rootContext, trapName, handler, traps })
     return traps
   }, {} as TTraps) as ProxyHandler<TTarget>
+
+export const createRootContext = (target: TTarget): TRootContext => {
+  return {
+    target,
+    proxies: new Map(),
+  }
+}
 
 export const DeepProxy = class<T extends TTarget> {
   constructor(
     target: T,
     handler: TProxyHandler,
     path: string[] = [],
-    root: TTarget = target,
+    rootContext: TRootContext = createRootContext(target),
   ) {
-    const traps = createTraps(root, handler, path)
+    const pathJoined = path.join('.')
+    const _proxy = rootContext.proxies.get(pathJoined)
+
+    if (_proxy) {
+      return _proxy
+    }
+
+    const traps = createTraps(rootContext, handler, path)
     const proxy = new Proxy(target, traps)
 
-    refs.set(traps, proxy)
+    rootContext.proxies.set(pathJoined, proxy)
 
     return proxy
   }

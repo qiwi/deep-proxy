@@ -135,9 +135,10 @@ describe('DeepProxy', () => {
         handler,
         DEFAULT,
         PROXY,
-        root,
+        rootContext,
         path,
         proxy,
+        key,
       }: any = {}) => {
         if (trapName === 'get') {
           if (typeof value === 'object' && value !== null) {
@@ -148,8 +149,8 @@ describe('DeepProxy', () => {
             return new DeepProxy(
               Object.assign(wrapper(value).bind(proxy), value),
               handler,
-              path,
-              root,
+              [...path, key],
+              rootContext,
             )
           }
         }
@@ -211,6 +212,18 @@ describe('DeepProxy', () => {
         expect(proxy.foo.foo).toBe('foo.foo')
         expect(proxy.bar.baz).toBe('qux')
         expect(proxy.null).toBeNull()
+      })
+
+      it('supports proxy caching', () => {
+        const target = { foo: { bar: { baz: 'qux' } } }
+
+        const proxy1 = new DeepProxy(target, simpleNestHandler)
+        const proxy2 = new DeepProxy(target, simpleNestHandler)
+
+        expect(proxy1.foo).toBe(proxy1.foo)
+        expect(proxy2.foo).toBe(proxy2.foo)
+        expect(proxy1.foo).not.toBe(proxy2.foo)
+        expect(proxy1.foo).not.toBe(target.foo)
       })
     })
   })
