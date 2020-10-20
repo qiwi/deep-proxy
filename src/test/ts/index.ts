@@ -172,6 +172,35 @@ describe('DeepProxy', () => {
     )
   })
 
+  it('wraps both objects and functions', () => {
+    const foo = () => 'foo' // eslint-disable-line
+    const target = {
+      foo,
+      bar: { baz: 'qux' },
+      null: null, // eslint-disable-line
+    }
+    foo.foo = 'foo.foo'
+
+    const proxy = new DeepProxy(target, simpleNestHandler)
+
+    expect(proxy.foo()).toBe('foo')
+    expect(proxy.foo.foo).toBe('foo.foo')
+    expect(proxy.bar.baz).toBe('qux')
+    expect(proxy.null).toBeNull()
+  })
+
+  it('supports proxy caching', () => {
+    const target = { foo: { bar: { baz: 'qux' } } }
+
+    const proxy1 = new DeepProxy(target, simpleNestHandler)
+    const proxy2 = new DeepProxy(target, simpleNestHandler)
+
+    expect(proxy1.foo).toBe(proxy1.foo)
+    expect(proxy2.foo).toBe(proxy2.foo)
+    expect(proxy1.foo).not.toBe(proxy2.foo)
+    expect(proxy1.foo).not.toBe(target.foo)
+  })
+
   describe('directives', () => {
     describe('PROXY', () => {
       it('builds proper context on chaining', () => {
@@ -202,35 +231,6 @@ describe('DeepProxy', () => {
           target: target.foo.bar,
           root: target,
         })
-      })
-
-      it('wraps both objects and functions', () => {
-        const foo = () => 'foo' // eslint-disable-line
-        const target = {
-          foo,
-          bar: { baz: 'qux' },
-          null: null, // eslint-disable-line
-        }
-        foo.foo = 'foo.foo'
-
-        const proxy = new DeepProxy(target, simpleNestHandler)
-
-        expect(proxy.foo()).toBe('foo')
-        expect(proxy.foo.foo).toBe('foo.foo')
-        expect(proxy.bar.baz).toBe('qux')
-        expect(proxy.null).toBeNull()
-      })
-
-      it('supports proxy caching', () => {
-        const target = { foo: { bar: { baz: 'qux' } } }
-
-        const proxy1 = new DeepProxy(target, simpleNestHandler)
-        const proxy2 = new DeepProxy(target, simpleNestHandler)
-
-        expect(proxy1.foo).toBe(proxy1.foo)
-        expect(proxy2.foo).toBe(proxy2.foo)
-        expect(proxy1.foo).not.toBe(proxy2.foo)
-        expect(proxy1.foo).not.toBe(target.foo)
       })
     })
   })
