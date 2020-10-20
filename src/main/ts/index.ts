@@ -96,9 +96,9 @@ const createHandlerContext = <T>(
       return targets.get(proxies.get('[]') as TTarget) as TTarget
     },
     target,
+    key,
     value,
     newValue,
-    key,
     handler,
     PROXY,
     DEFAULT,
