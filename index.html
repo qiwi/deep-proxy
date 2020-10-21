@@ -92,7 +92,7 @@ yarn add @qiwi/deep-proxy</code></pre>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {DeepProxy} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@qiwi/deep-proxy&#x27;</span>
 
 <span class="hljs-keyword">const</span> target = {foo: <span class="hljs-string">&#x27;bar&#x27;</span>, a: {b: <span class="hljs-string">&#x27;c&#x27;</span>}}
-<span class="hljs-keyword">const</span> proxy = <span class="hljs-keyword">new</span> DeepProxy(target, <span class="hljs-function">(<span class="hljs-params">{trapName, value, key, DEFAULT, NEXT}: THandlerContext</span>) =&gt;</span> {
+<span class="hljs-keyword">const</span> proxy = <span class="hljs-keyword">new</span> DeepProxy(target, <span class="hljs-function">(<span class="hljs-params">{trapName, value, key, DEFAULT, PROXY}: THandlerContext</span>) =&gt;</span> {
   <span class="hljs-keyword">if</span> (trapName === <span class="hljs-string">&#x27;set&#x27;</span>) {
     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">&#x27;target is immutable&#x27;</span>)
   }
@@ -117,9 +117,16 @@ proxy.a.b       <span class="hljs-comment">// qux</span>
 proxy.bar       <span class="hljs-comment">// qux</span>
 proxy.d         <span class="hljs-comment">// baz</span>
 proxy.a = <span class="hljs-string">&#x27;a&#x27;</span>   <span class="hljs-comment">// TypeError</span></code></pre>
-				<p>FP adepts may use <code>createDeepProxy</code> factory instead of <code>DeepProxy</code> class. Note, the <code>handler</code> goes as the first argument.</p>
+				<p>FP adepts may use <code>createDeepProxy</code> factory instead of <code>DeepProxy</code> class and get some magic.</p>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> {createDeepProxy} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@qiwi/deep-proxy&#x27;</span>
-<span class="hljs-keyword">const</span> proxy = createDeepProxy(<span class="hljs-function">(<span class="hljs-params">{DEFAULT}</span>) =&gt;</span> DEFAULT, target)</code></pre>
+
+<span class="hljs-comment">// Regular usage case</span>
+<span class="hljs-keyword">const</span> handler = <span class="hljs-function">(<span class="hljs-params">{DEFAULT}</span>) =&gt;</span> DEFAULT
+<span class="hljs-keyword">const</span> proxy1 = createDeepProxy(target, handler)
+
+<span class="hljs-comment">// Passing defaults through this context</span>
+<span class="hljs-keyword">const</span> customProxyFactory = createDeepProxy.bind({handler})
+<span class="hljs-keyword">const</span> proxy2 = customProxyFactory(target)</code></pre>
 				<p>All the traps follow to the single handler, so you&#39;re able to build various complex conditions in one place. This approach might be useful if you need some kind of &quot;rich&quot; model, but don&#39;t want to complicate DTO.  </p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">if</span> (path.length &gt; <span class="hljs-number">10</span>) {
   <span class="hljs-keyword">if</span> (prop === <span class="hljs-string">&#x27;foo&#x27;</span> || [<span class="hljs-string">&#x27;get&#x27;</span>, <span class="hljs-string">&#x27;set&#x27;</span>, <span class="hljs-string">&#x27;ownKeys&#x27;</span>].includes(trapName)) {
@@ -174,6 +181,15 @@ proxy.a = <span class="hljs-string">&#x27;a&#x27;</span>   <span class="hljs-com
 							<td>Returns a proxy of nested object with parent&#39;s proxy handler.</td>
 						</tr>
 				</tbody></table>
+				<p>A bit more sugar on top: by default <code>PROXY</code> directive uses <code>value</code> from context, but you can pass your own.</p>
+				<pre><code><span class="hljs-keyword">const</span> proxy = <span class="hljs-keyword">new</span> DeepProxy({foo: {bar: <span class="hljs-string">&#x27;baz&#x27;</span>}}, ({<span class="hljs-keyword">value</span>, trapName}) =&gt; {
+  <span class="hljs-keyword">if</span> (trapName === <span class="hljs-string">&#x27;get&#x27;</span> &amp;&amp; <span class="hljs-keyword">typeof</span> <span class="hljs-keyword">value</span> === <span class="hljs-string">&#x27;object&#x27;</span> &amp;&amp; <span class="hljs-keyword">value</span> !== <span class="hljs-literal">null</span>) {
+    <span class="hljs-keyword">return</span> PROXY({baz: <span class="hljs-string">&#x27;qux&#x27;</span>})
+  }
+
+  <span class="hljs-keyword">return</span> DEFAULT
+})
+proxy.foo.baz <span class="hljs-comment">// &#x27;qux&#x27;</span></code></pre>
 				<a href="#thandlercontext" id="thandlercontext" style="color: inherit; text-decoration: none;">
 					<h2>THandlerContext</h2>
 				</a>
@@ -183,10 +199,10 @@ proxy.a = <span class="hljs-string">&#x27;a&#x27;</span>   <span class="hljs-com
   traps: TTraps           <span class="hljs-comment">// proxy handler map reference</span>
   root: TTarget           <span class="hljs-comment">// root level proxy&#x27;s target</span>
   args: <span class="hljs-built_in">any</span>[]             <span class="hljs-comment">// trap method arguments as is</span>
-  path: <span class="hljs-built_in">string</span>[]          <span class="hljs-comment">// path to current proxy</span>
+  path: <span class="hljs-built_in">string</span>[]          <span class="hljs-comment">// path to current proxy from root</span>
   key?: keyof T           <span class="hljs-comment">// prop key if defined in trap args</span>
   value: <span class="hljs-built_in">any</span>              <span class="hljs-comment">// current field value by key</span>
-  newValue?: <span class="hljs-built_in">any</span>          <span class="hljs-comment">// new assinged value (#set())</span>
+  newValue?: <span class="hljs-built_in">any</span>          <span class="hljs-comment">// new assigned value (#set())</span>
   handler: TProxyHandler  <span class="hljs-comment">// handler reference</span>
   PROXY: symbol           <span class="hljs-comment">// directives</span>
   DEFAULT: symbol
@@ -220,7 +236,7 @@ proxy.a = <span class="hljs-string">&#x27;a&#x27;</span>   <span class="hljs-com
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-not-exported">
-						<a href="modules/reflection-67.html">&lt;em&gt;<wbr>Module&lt;/em&gt;</a>
+						<a href="modules/reflection-71.html">&lt;em&gt;<wbr>Module&lt;/em&gt;</a>
 					</li>
 				</ul>
 			</nav>
