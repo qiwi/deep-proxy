@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/qiwi/deep-proxy/compare/v1.4.1...v1.5.0) (2020-10-21)
+
+
+### Features
+
+* let PROXY directive be used as pre-configured deepProxyFactory ([9ddede1](https://github.com/qiwi/deep-proxy/commit/9ddede1b9f7392ae8674abc295dce65b253f5fb0)), closes [#5](https://github.com/qiwi/deep-proxy/issues/5)
+
 ## [1.4.1](https://github.com/qiwi/deep-proxy/compare/v1.4.0...v1.4.1) (2020-10-20)
 
 
