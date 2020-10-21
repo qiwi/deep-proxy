@@ -3,13 +3,6 @@ export type TTarget = (object | Function) & Record<any, any>
 
 export type TTrapName = keyof typeof Reflect
 
-export type TTrap = <T extends TTarget>(
-  target: T,
-  prop: keyof T,
-  val?: any,
-  receiver?: any,
-) => any
-
 // https://github.com/microsoft/TypeScript/issues/24220
 export type TTraps = ProxyHandler<TTarget>
 
@@ -88,6 +81,7 @@ const createHandlerContext = <T>(
   const key = trapsWithKey.includes(trapName) ? prop : undefined
   const newValue = trapName === 'set' ? val : undefined
 
+  // prettier-ignore
   return {
     target,
     trapName,
@@ -98,21 +92,11 @@ const createHandlerContext = <T>(
     sharedContext,
     key,
     newValue,
-    get value() {
-      return key && target[key]
-    },
-    get root() {
-      return targets.get(proxies.get('[]') as TTarget) as TTarget
-    },
-    get proxy() {
-      return proxies.get(getPathHash(path)) as TTarget
-    },
+    get value() { return key && target[key] },
+    get root() { return targets.get(proxies.get('[]') as TTarget) as TTarget },
+    get proxy() { return proxies.get(getPathHash(path)) as TTarget },
     DEFAULT,
-    PROXY: createDeepProxy.bind({
-      handler,
-      path: [...path, key as string],
-      sharedContext,
-    }),
+    PROXY: createDeepProxy.bind({ sharedContext, handler, path: [...path, key as string] }),
   }
 }
 
@@ -125,7 +109,7 @@ const trap = function <T extends TTarget>(
 ) {
   const { trapName, handler } = this
   const handlerContext = createHandlerContext(this, target, prop, val, receiver)
-  const { PROXY } = handlerContext
+  const { PROXY, DEFAULT } = handlerContext
   const result = handler(handlerContext)
 
   if (result === PROXY) {
