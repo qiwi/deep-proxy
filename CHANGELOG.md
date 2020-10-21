@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/qiwi/deep-proxy/compare/v1.5.0...v1.6.0) (2020-10-21)
+
+
+### Features
+
+* make `value` resolution be lazy ([26a65c8](https://github.com/qiwi/deep-proxy/commit/26a65c8e5bbefcc7cae28191c552576374bdc224))
+
 # [1.5.0](https://github.com/qiwi/deep-proxy/compare/v1.4.1...v1.5.0) (2020-10-21)
 
 
