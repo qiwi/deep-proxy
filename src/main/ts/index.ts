@@ -86,32 +86,33 @@ const createHandlerContext = <T>(
   const { path, trapName, handler, traps, sharedContext } = trapContext
   const { proxies, targets } = sharedContext
   const key = trapsWithKey.includes(trapName) ? prop : undefined
-  const value = key && target[key]
   const newValue = trapName === 'set' ? val : undefined
 
   return {
-    args,
+    target,
     trapName,
     traps,
+    args,
     path,
+    handler,
+    sharedContext,
+    key,
+    newValue,
+    get value() {
+      return key && target[key]
+    },
     get root() {
       return targets.get(proxies.get('[]') as TTarget) as TTarget
     },
-    target,
-    key,
-    value,
-    newValue,
-    handler,
+    get proxy() {
+      return proxies.get(getPathHash(path)) as TTarget
+    },
+    DEFAULT,
     PROXY: createDeepProxy.bind({
       handler,
       path: [...path, key as string],
       sharedContext,
     }),
-    DEFAULT,
-    sharedContext,
-    get proxy() {
-      return proxies.get(getPathHash(path)) as TTarget
-    },
   }
 }
 
@@ -124,11 +125,11 @@ const trap = function <T extends TTarget>(
 ) {
   const { trapName, handler } = this
   const handlerContext = createHandlerContext(this, target, prop, val, receiver)
-  const { PROXY, value } = handlerContext
+  const { PROXY } = handlerContext
   const result = handler(handlerContext)
 
   if (result === PROXY) {
-    return PROXY(value as TTarget)
+    return PROXY(handlerContext.value as TTarget)
   }
 
   if (result === DEFAULT) {
