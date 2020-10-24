@@ -208,23 +208,26 @@ describe('DeepProxy', () => {
     expect(proxy1.foo).not.toBe(target.foo)
   })
 
-  it('updates shared context if target changes', () => {
-    const target = { foo: { bar: 'baz' } }
-    const sharedContext = { proxies: new Map(), targets: new WeakMap() }
-    const proxy = new DeepProxy(target, simpleNestHandler, [], sharedContext)
-    const foo1 = proxy.foo
+  it('updates parentProxyContext if target changes', () => {
+    const target = { foo: { bar: { baz: 'baz' } } }
 
-    expect(proxy.foo.bar).toBe('baz')
-    expect(foo1).toBe(proxy.foo)
-    expect(sharedContext.targets.get(foo1)).toBe(target.foo)
+    const proxy = new DeepProxy(target, simpleNestHandler)
+    const foo = proxy.foo
+    const bar = proxy.foo.bar
+
+    expect(proxy.foo).toBe(foo)
+    expect(proxy.foo.bar).toBe(bar)
+
     // @ts-ignore
-    proxy.foo = { baz: 'qux' }
+    proxy.foo = { bar: { b: 'c' } }
 
-    const foo2 = proxy.foo
-    expect(foo2).toBe(proxy.foo)
-    expect(foo2).not.toBe(foo1)
-    expect(sharedContext.targets.get(foo2)).toBe(target.foo)
-    expect(sharedContext.targets.get(foo1)).toBeUndefined()
+    const foo1 = proxy.foo
+    const bar1 = proxy.foo.bar
+
+    expect(proxy.foo).toBe(foo1)
+    expect(proxy.foo.bar).toBe(bar1)
+    expect(proxy.foo).not.toBe(foo)
+    expect(foo.bar).toBe(bar)
   })
 
   describe('directives', () => {

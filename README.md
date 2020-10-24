@@ -112,7 +112,7 @@ Metrics, debugging, throttling — all becomes better with deep proxy.
 |`PROXY`| Returns a proxy of nested object with parent's proxy handler.
 
 A bit more sugar on top: by default `PROXY` directive uses `value` from context, but you can pass your own.
-```
+```typescript
 const proxy = new DeepProxy({foo: {bar: 'baz'}}, ({value, trapName}) => {
   if (trapName === 'get' && typeof value === 'object' && value !== null) {
     return PROXY({baz: 'qux'})
