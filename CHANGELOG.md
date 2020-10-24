@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/qiwi/deep-proxy/compare/v1.6.0...v1.7.0) (2020-10-24)
+
+
+### Features
+
+* separate proxy contexts ([05fb128](https://github.com/qiwi/deep-proxy/commit/05fb1285992815a8fd1ba15ce5eddb945c58c1f8)), closes [#13](https://github.com/qiwi/deep-proxy/issues/13)
+
 # [1.6.0](https://github.com/qiwi/deep-proxy/compare/v1.5.0...v1.6.0) (2020-10-21)
 
 
