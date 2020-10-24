@@ -5,7 +5,6 @@ export type TProxy<T extends TTarget> = T
 
 export type TTrapName = keyof typeof Reflect
 
-// https://github.com/microsoft/TypeScript/issues/24220
 export type TTraps = ProxyHandler<TTarget>
 
 export type THandlerContext<T extends TTarget> = {
@@ -54,7 +53,7 @@ export interface DeepProxyConstructor {
     handler?: TProxyHandler,
     path?: string[],
     parentProxyContext?: TProxyContext,
-  ): T
+  ): TProxy<T>
 }
 
 const trapNames = Object.keys(
@@ -157,7 +156,7 @@ export const createDeepProxy = function <T extends TTarget>(
   handler?: TProxyHandler,
   path?: string[],
   parentProxyContext?: TProxyContext,
-): T {
+): TProxy<T> {
   checkTarget(target)
 
   const _this: TCreatorThis = { ...this }
