@@ -1,22 +1,18 @@
 // eslint-disable-next-line
 export type TTarget = (object | Function) & Record<any, any>
 
+export type TProxy<T extends TTarget> = T
+
 export type TTrapName = keyof typeof Reflect
 
 // https://github.com/microsoft/TypeScript/issues/24220
 export type TTraps = ProxyHandler<TTarget>
-
-export type TSharedContext = {
-  targets: WeakMap<TTarget, TTarget>
-  proxies: Map<string, TTarget>
-}
 
 export type THandlerContext<T extends TTarget> = {
   target: T
   trapName: TTrapName
   traps: TTraps
   root: TTarget
-  sharedContext: TSharedContext
   args: any[]
   path: string[]
   value: any
@@ -25,23 +21,29 @@ export type THandlerContext<T extends TTarget> = {
   handler: TProxyHandler // eslint-disable-line
   PROXY: typeof createDeepProxy // eslint-disable-line
   DEFAULT: symbol
-  proxy: TTarget
+  proxy: TProxy<TTarget>
 }
 
 export type TProxyHandler = <T>(proxyContext: THandlerContext<T>) => any
 
 export type TTrapContext = {
   trapName: TTrapName
-  sharedContext: TSharedContext
   handler: TProxyHandler
-  path: string[]
   traps: TTraps
+}
+
+export type TProxyContext = {
+  target: TTarget // proxy target object/function
+  proxy: TProxy<TTarget> // proxy reference
+  root: TTarget // root level proxy's target
+  path: string[] // path to current proxy from root
+  nested: Map<keyof TTarget, TTraps> // nested traps mapped by their paths
 }
 
 export type TCreatorThis = {
   handler?: TProxyHandler
   path?: string[]
-  sharedContext?: TSharedContext
+  parentProxyContext?: TProxyContext
 }
 
 export const DEFAULT = Symbol('default')
@@ -51,7 +53,7 @@ export interface DeepProxyConstructor {
     target: T,
     handler?: TProxyHandler,
     path?: string[],
-    sharedContext?: TSharedContext,
+    parentProxyContext?: TProxyContext,
   ): T
 }
 
@@ -76,10 +78,11 @@ const createHandlerContext = <T>(
   receiver?: any,
 ): THandlerContext<T> => {
   const args = [target, prop, val, receiver]
-  const { path, trapName, handler, traps, sharedContext } = trapContext
-  const { proxies, targets } = sharedContext
+  const { trapName, handler, traps } = trapContext
   const key = trapsWithKey.includes(trapName) ? prop : undefined
   const newValue = trapName === 'set' ? val : undefined
+  const parentProxyContext = contexts.get(traps) as TProxyContext
+  const { root, proxy, path } = parentProxyContext
 
   // prettier-ignore
   return {
@@ -89,16 +92,17 @@ const createHandlerContext = <T>(
     args,
     path,
     handler,
-    sharedContext,
     key,
     newValue,
+    root,
+    proxy,
     get value() { return key && target[key] },
-    get root() { return targets.get(proxies.get('[]') as TTarget) as TTarget },
-    get proxy() { return proxies.get(getPathHash(path)) as TTarget },
     DEFAULT,
-    PROXY: createDeepProxy.bind({ sharedContext, handler, path: [...path, key as string] }),
+    PROXY: createDeepProxy.bind({ parentProxyContext, handler, path: [...path, key as string] }),
   }
 }
+
+const contexts = new WeakMap<TTraps, TProxyContext>()
 
 const trap = function <T extends TTarget>(
   this: TTrapContext,
@@ -124,26 +128,15 @@ const trap = function <T extends TTarget>(
   return result
 }
 
-const createTraps = (
-  sharedContext: TSharedContext,
-  handler: TProxyHandler,
-  path: string[],
-) =>
+const createTraps = (handler: TProxyHandler) =>
   trapNames.reduce<TTraps>((traps, trapName) => {
     traps[trapName] = trap.bind({
-      path,
-      sharedContext,
       trapName,
       handler,
       traps,
     })
     return traps
   }, {})
-
-export const createSharedContext = (): TSharedContext => ({
-  targets: new WeakMap(),
-  proxies: new Map(),
-})
 
 const checkTarget = (target: any): void => {
   if (
@@ -156,41 +149,43 @@ const checkTarget = (target: any): void => {
   }
 }
 
-const getPathHash = (path: string[]): string => JSON.stringify(path)
-
-const defaultProxyHandler: TProxyHandler = ({ DEFAULT }) => DEFAULT
+export const defaultProxyHandler: TProxyHandler = ({ DEFAULT }) => DEFAULT
 
 export const createDeepProxy = function <T extends TTarget>(
   this: TCreatorThis | void,
   target: T,
   handler?: TProxyHandler,
   path?: string[],
-  sharedContext?: TSharedContext,
+  parentProxyContext?: TProxyContext,
 ): T {
   checkTarget(target)
 
   const _this: TCreatorThis = { ...this }
   const _handler = handler || _this.handler || defaultProxyHandler
   const _path = path || _this.path || []
-  const _sharedContext =
-    sharedContext || _this.sharedContext || createSharedContext()
-  const hash = getPathHash(_path)
-  const { proxies, targets } = _sharedContext
-  const _proxy = proxies.get(hash)
+  const _parentProxyContext = _this.parentProxyContext || parentProxyContext
+  const key = _path[_path.length - 1]
+  const root = _parentProxyContext?.root || target
+  const proxyContext = contexts.get(
+    _parentProxyContext?.nested.get(key) as TTraps,
+  )
 
-  if (_proxy) {
-    if (target === targets.get(_proxy)) {
-      return _proxy
-    }
-
-    targets.delete(_proxy)
+  if (proxyContext?.target === target) {
+    return proxyContext.proxy
   }
 
-  const traps = createTraps(_sharedContext, _handler, _path)
+  const traps = createTraps(_handler)
   const proxy = new Proxy(target, traps)
 
-  proxies.set(hash, proxy)
-  targets.set(proxy, target)
+  _parentProxyContext?.nested.set(key, traps)
+
+  contexts.set(traps, {
+    target,
+    proxy,
+    nested: new Map(),
+    path: _path,
+    root,
+  })
 
   return proxy
 }
@@ -200,8 +195,8 @@ export const DeepProxy = class<T extends TTarget> {
     target: T,
     handler?: TProxyHandler,
     path?: string[],
-    sharedContext?: TSharedContext,
+    parentProxyContext?: TProxyContext,
   ) {
-    return createDeepProxy(target, handler, path, sharedContext)
+    return createDeepProxy(target, handler, path, parentProxyContext)
   }
 } as DeepProxyConstructor
