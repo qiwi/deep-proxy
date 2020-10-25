@@ -3,7 +3,6 @@
   "compilerOptions": {
     "target": "es5",
     "outDir": "target/es5",
-    "skipLibCheck": true,
     "module": "umd"
   },
   "include": ["src/main/**/*.ts"]

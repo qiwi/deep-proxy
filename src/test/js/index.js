@@ -4,7 +4,7 @@ describe('js builds', () => {
   })
 
   it('DeepProxy is properly exported (es6)', () => {
-    expect(typeof require('../../../target/es6').DeepProxy).toBe('function') // eslint-disable-line
+    expect(typeof require('../../../target/es6/proxy').DeepProxy).toBe('function') // eslint-disable-line
   })
 
   it('DeepProxy is properly exported (bundle)', () => {

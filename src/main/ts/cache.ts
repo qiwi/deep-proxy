@@ -17,7 +17,7 @@ export const addToCache = <T extends TTarget>(
   path: string[],
   traps: TTraps,
   proxy: TProxy<T>,
-) => {
+): void => {
   getCache(getCache(cache.traps, root), target, Map).set(path.join('.'), traps)
   cache.proxies.set(traps, proxy)
 }
@@ -26,7 +26,7 @@ export const getFromCache = <T extends TTarget>(
   root: TTarget,
   target: T,
   path: string[],
-) =>
+): TTarget | undefined =>
   cache.proxies.get(
     cache.traps.get(root)?.get(target)?.get(path.join('.')) as TTraps,
   )
