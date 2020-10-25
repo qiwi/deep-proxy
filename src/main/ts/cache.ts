@@ -8,9 +8,10 @@ const cache: TProxyCache = {
 const getCache = <M extends WeakMap<any, any>, K>(
   map: M,
   key: K,
-  Constructor: any
+  Constructor: any,
 ) => map.get(key) || map.set(key, new Constructor()).get(key)
 
+// prettier-ignore
 const getKey = (path: string[]): string => path.join(​) // eslint-disable-line no-irregular-whitespace
 
 export const addToCache = <T extends TTarget>(
@@ -20,7 +21,10 @@ export const addToCache = <T extends TTarget>(
   traps: TTraps,
   proxy: TProxy<T>,
 ): void => {
-  getCache(getCache(cache.traps, root, WeakMap), target, Map).set(getKey(path), traps)
+  getCache(getCache(cache.traps, root, WeakMap), target, Map).set(
+    getKey(path),
+    traps,
+  )
   cache.proxies.set(traps, proxy)
 }
 
@@ -28,7 +32,7 @@ export const getFromCache = <T extends TTarget>(
   root: TTarget,
   target: T,
   path: string[],
-): TTarget | undefined =>
+): TProxy<T> | undefined =>
   cache.proxies.get(
     cache.traps.get(root)?.get(target)?.get(getKey(path)) as TTraps,
   )
