@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/qiwi/deep-proxy/compare/v1.7.0...v1.8.0) (2020-10-25)
+
+
+### Features
+
+* apply proxies caching for root level targets ([fcc0652](https://github.com/qiwi/deep-proxy/commit/fcc0652603b534250e8eaeb73a20d89632ee57f6))
+
 # [1.7.0](https://github.com/qiwi/deep-proxy/compare/v1.6.0...v1.7.0) (2020-10-24)
 
 
