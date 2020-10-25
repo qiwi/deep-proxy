@@ -84,7 +84,7 @@ yarn add @qiwi/deep-proxy</code></pre>
 					<li>Proxy self-reference in handler context (meaningful for methods binding)</li>
 					<li>JS, TS and Flow support</li>
 					<li>Directive shortcuts</li>
-					<li>Nested proxies caching</li>
+					<li>Proxies caching</li>
 				</ul>
 				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
 					<h2>Usage</h2>
@@ -207,6 +207,24 @@ proxy.foo.baz <span class="hljs-comment">// &#x27;qux&#x27;</span></code></pre>
   PROXY: symbol           <span class="hljs-comment">// directives</span>
   DEFAULT: symbol
   proxy: TTarget          <span class="hljs-comment">// proxy reference</span>
+}</code></pre>
+				<a href="#caching" id="caching" style="color: inherit; text-decoration: none;">
+					<h2>Caching</h2>
+				</a>
+				<p><code>createDeepProxy</code> factory returns the stored proxy reference when all the arguments matched one of the previous calls:</p>
+				<ol>
+					<li><code>target</code> refs are strictly equal</li>
+					<li><code>root</code> refs equal too</li>
+					<li><code>path</code> values match</li>
+				</ol>
+				<p>Note, this is not a regular memoization, but a loosely coupled <code>WeakMap</code>, so unused proxies can be cleaned up by GC.</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> TProxyCache = {
+  <span class="hljs-comment">// root object refers to some targets objects,</span>
+  <span class="hljs-comment">// that refer to map, that binds nested paths with their traps</span>
+  traps: <span class="hljs-built_in">WeakMap</span>&lt;TTarget, <span class="hljs-built_in">WeakMap</span>&lt;TTarget, <span class="hljs-built_in">Map</span>&lt;<span class="hljs-built_in">string</span>, TTraps&gt;&gt;&gt;
+
+  <span class="hljs-comment">// And these traps refer to proxies</span>
+  proxies: <span class="hljs-built_in">WeakMap</span>&lt;TTraps, TProxy&lt;TTarget&gt;&gt;
 }</code></pre>
 				<a href="#note" id="note" style="color: inherit; text-decoration: none;">
 					<h2>Note</h2>
