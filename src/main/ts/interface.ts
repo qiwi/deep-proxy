@@ -48,8 +48,8 @@ export type TTrapContext = {
 }
 
 export type TProxyCache = {
-  // root object refers to targets object,
-  // that refers to map, that binds nested paths with their traps
+  // root object refers to some targets objects,
+  // that refer to map, that binds nested paths with their traps
   traps: WeakMap<TTarget, WeakMap<TTarget, Map<string, TTraps>>>
 
   // And these traps refer to proxies

@@ -18,7 +18,7 @@ yarn add @qiwi/deep-proxy
 * Proxy self-reference in handler context (meaningful for methods binding)
 * JS, TS and Flow support
 * Directive shortcuts
-* Nested proxies caching
+* Proxies caching
 
 ## Usage
 ```typescript
@@ -139,6 +139,24 @@ type THandlerContext<T extends TTarget> = {
   PROXY: symbol           // directives
   DEFAULT: symbol
   proxy: TTarget          // proxy reference
+}
+```
+
+## Caching
+`createDeepProxy` factory returns the stored proxy reference when all the arguments matched one of the previous calls:
+1) `target` refs are strictly equal
+2) `root` refs equal too
+3) `path` values match
+
+Note, this is not a regular memoization, but a loosely coupled `WeakMap`, so unused proxies can be cleaned up by GC.
+```typescript
+export type TProxyCache = {
+  // root object refers to some targets objects,
+  // that refer to map, that binds nested paths with their traps
+  traps: WeakMap<TTarget, WeakMap<TTarget, Map<string, TTraps>>>
+
+  // And these traps refer to proxies
+  proxies: WeakMap<TTraps, TProxy<TTarget>>
 }
 ```
 
