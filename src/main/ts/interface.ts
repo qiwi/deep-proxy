@@ -56,10 +56,6 @@ export type TProxyCache = {
   proxies: WeakMap<TTraps, TProxy<TTarget>>
 }
 
-export type TWeakCache = WeakMap<TTarget, WeakMap<TTarget, Map<string, TTraps>>>
-
-export type TProxiesMap = WeakMap<TTraps, TProxy<TTarget>>
-
 export interface DeepProxyConstructor {
   new <T extends TTarget>(
     target: T,

@@ -9,8 +9,6 @@ import {
   TProxyHandler,
   TTrapContext,
   TProxyFactoryThis,
-  TWeakCache,
-  TProxiesMap,
   DeepProxyConstructor,
 } from './interface'
 
