@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/qiwi/deep-proxy/compare/v1.8.0...v1.8.1) (2020-10-25)
+
+
+### Bug Fixes
+
+* use WeakMap instead of Map for target refs ([ef44497](https://github.com/qiwi/deep-proxy/commit/ef44497d959336099a30af32f27d327b1f1c9dc6))
+
 # [1.8.0](https://github.com/qiwi/deep-proxy/compare/v1.7.0...v1.8.0) (2020-10-25)
 
 
