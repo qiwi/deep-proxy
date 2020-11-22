@@ -43,4 +43,4 @@ jobs:
       if: branch = master AND type != pull_request
       workspaces:
         use: shared
-      script: semantic-release
+      script: npx -p @qiwi/semrel-toolkit semrel -e @qiwi/semrel-config
