@@ -119,6 +119,7 @@ describe('DeepProxy', () => {
       function (this: any, ...args: Parameters<T>) {
         return (fn.call(this, ...args) + '').toUpperCase()
       }
+    // eslint-disable-next-line
     const fn = function () {
       // @ts-ignore
       return this.foo
@@ -127,6 +128,7 @@ describe('DeepProxy', () => {
       fn,
       foo: 'foo',
     }
+    // eslint-disable-next-line
     const inner = function () {
       return 'inner'
     }
