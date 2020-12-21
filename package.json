@@ -63,7 +63,7 @@
     "eslint-config-prettier": "^7.0.0",
     "eslint-config-qiwi": "^1.10.0",
     "jest": "^26.6.3",
-    "microbundle": "^0.12.4",
+    "microbundle": "^0.13.0",
     "prettier": "^2.2.0",
     "rimraf": "^3.0.2",
     "terser": "^5.5.0",
