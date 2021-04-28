@@ -26,7 +26,7 @@
     "test:report": "yarn test && yarn push:report",
     "push:report": "yarn coveralls:push",
     "coveralls:push": "cat ./coverage/lcov.info | coveralls || exit 0",
-    "docs": "typedoc --readme README.md --tsconfig tsconfig.json src/main",
+    "docs": "typedoc",
     "uglify": "for f in $(find target -name '*.js'); do short=${f%.js}; terser -c -m -o $short.js -- $f; done",
     "postupdate": "yarn && npx yarn-audit-fix --audit-level=moderate && yarn build && yarn test",
     "format": "prettier --write \"src/**/*.ts\""
@@ -53,26 +53,25 @@
   "author": "Anton Golub <a.golub@qiwi.com>",
   "license": "MIT",
   "devDependencies": {
-    "@qiwi/libdefkit": "^2.1.4",
-    "@qiwi/substrate": "^1.19.4",
-    "@swissquote/crafty-preset-jest": "^1.13.7",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^14.14.9",
+    "@qiwi/libdefkit": "^2.1.8",
+    "@qiwi/substrate": "^1.20.7",
+    "@swissquote/crafty-preset-jest": "^1.14.0",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.0.1",
     "coveralls": "^3.1.0",
-    "eslint": "^7.14.0",
-    "eslint-config-prettier": "^7.0.0",
-    "eslint-config-qiwi": "^1.10.0",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-qiwi": "^1.11.2",
     "jest": "^26.6.3",
     "microbundle": "^0.13.0",
-    "prettier": "^2.2.0",
+    "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
-    "terser": "^5.5.0",
-    "ts-jest": "^26.4.4",
-    "typedoc": "^0.19.2",
-    "typedoc-plugin-external-module-name": "^4.0.3",
-    "typescript": "4.1.5"
+    "terser": "^5.7.0",
+    "ts-jest": "^26.5.5",
+    "typedoc": "^0.20.36",
+    "typescript": "4.2.4"
   },
   "dependencies": {
-    "tslib": "^2.0.3"
+    "tslib": "^2.2.0"
   }
 }
