@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>@qiwi/deep-proxy | @qiwi/deep-proxy</title>
+	<title>proxy | @qiwi/deep-proxy</title>
 	<meta name="description" content="Documentation for @qiwi/deep-proxy">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">:root {
@@ -2674,7 +2674,7 @@ img {
 		<div class="container">
 			<div class="table-wrap">
 				<div class="table-cell">
-					<strong><a href="index.html">@qiwi/deep-proxy</a></strong>
+					<strong><a href="../index.html">@qiwi/deep-proxy</a></strong>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -2704,218 +2704,134 @@ img {
 </header>
 <nav class="tsd-navigation secondary">
 	<ul>
+		<li class=" tsd-kind-variable tsd-parent-kind-module">
+			<a href="proxy.html#default" class="tsd-kind-icon">DEFAULT</a>
+		</li>
+		<li class=" tsd-kind-variable tsd-parent-kind-module">
+			<a href="proxy.html#deepproxy" class="tsd-kind-icon">Deep<wbr>Proxy</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+			<a href="proxy.html#createdeepproxy" class="tsd-kind-icon">create<wbr>Deep<wbr>Proxy</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+			<a href="proxy.html#defaultproxyhandler" class="tsd-kind-icon">default<wbr>Proxy<wbr>Handler</a>
+		</li>
 	</ul>
 </nav>
 <div class="container container-main">
 	<div class="content-wrap">
-		<div class="tsd-panel tsd-typography">
-			<a href="#qiwideep-proxy" id="qiwideep-proxy" style="color: inherit; text-decoration: none;">
-				<h1>@qiwi/deep-proxy</h1>
-			</a>
-			<p>Deep proxy implementation for TypeScript</p>
-			<p><a href="https://travis-ci.com/qiwi/deep-proxy"><img src="https://travis-ci.com/qiwi/deep-proxy.svg?branch=master" alt="Build Status"></a>
-				<a href="https://david-dm.org/qiwi/deep-proxy"><img src="https://img.shields.io/david/qiwi/deep-proxy" alt="David"></a>
-				<a href="https://codeclimate.com/github/qiwi/deep-proxy/maintainability"><img src="https://api.codeclimate.com/v1/badges/b8bb8d6c35bc74c123a5/maintainability" alt="Maintainability"></a>
-				<a href="https://codeclimate.com/github/qiwi/deep-proxy/test_coverage"><img src="https://api.codeclimate.com/v1/badges/b8bb8d6c35bc74c123a5/test_coverage" alt="Test Coverage"></a>
-			<a href="https://www.npmjs.com/package/@qiwi/deep-proxy"><img src="https://img.shields.io/npm/v/@qiwi/deep-proxy" alt="npm (scoped)"></a></p>
-			<a href="#install" id="install" style="color: inherit; text-decoration: none;">
-				<h2>Install</h2>
-			</a>
-			<pre><code class="language-shell"><span style="color: #000000">npm i @qiwi/deep-proxy</span>
-<span style="color: #000000">yarn add @qiwi/deep-proxy</span>
-</code></pre>
-			<a href="#key-features" id="key-features" style="color: inherit; text-decoration: none;">
-				<h2>Key features</h2>
-			</a>
-			<ul>
-				<li>Single proxy handler with rich context instead of trap map</li>
-				<li>Proxy self-reference in handler context (meaningful for methods binding)</li>
-				<li>JS, TS and Flow support</li>
-				<li>Directive shortcuts</li>
-				<li>Proxies caching</li>
-			</ul>
-			<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
-				<h2>Usage</h2>
-			</a>
-			<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">DeepProxy</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@qiwi/deep-proxy&#039;</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">target</span><span style="color: #000000"> = {</span><span style="color: #001080">foo:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;bar&#039;</span><span style="color: #000000">, </span><span style="color: #001080">a:</span><span style="color: #000000"> {</span><span style="color: #001080">b:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;c&#039;</span><span style="color: #000000">}}</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">proxy</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">DeepProxy</span><span style="color: #000000">(</span><span style="color: #001080">target</span><span style="color: #000000">, ({</span><span style="color: #001080">trapName</span><span style="color: #000000">, </span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">key</span><span style="color: #000000">, </span><span style="color: #001080">DEFAULT</span><span style="color: #000000">, </span><span style="color: #001080">PROXY</span><span style="color: #000000">}: </span><span style="color: #267F99">THandlerContext</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">trapName</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;set&#039;</span><span style="color: #000000">) {</span>
-<span style="color: #000000">    </span><span style="color: #AF00DB">throw</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">TypeError</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;target is immutable&#039;</span><span style="color: #000000">)</span>
-<span style="color: #000000">  }</span>
-
-<span style="color: #000000">  </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">trapName</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;get&#039;</span><span style="color: #000000">) {</span>
-<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">value</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;object&#039;</span><span style="color: #000000"> &amp;&amp; </span><span style="color: #001080">value</span><span style="color: #000000"> !== </span><span style="color: #0000FF">null</span><span style="color: #000000">) {</span>
-<span style="color: #000000">      </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0070C1">PROXY</span>
-<span style="color: #000000">    }</span>
-
-<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">key</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;d&#039;</span><span style="color: #000000">) {</span>
-<span style="color: #000000">      </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;baz&#039;</span>
-<span style="color: #000000">    }</span>
-
-<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;qux&#039;</span>
-<span style="color: #000000">  }</span>
-
-<span style="color: #000000">  </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0070C1">DEFAULT</span>
-<span style="color: #000000">})</span>
-
-<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">foo</span><span style="color: #000000">       </span><span style="color: #008000">// qux</span>
-<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">a</span><span style="color: #000000">.</span><span style="color: #001080">b</span><span style="color: #000000">       </span><span style="color: #008000">// qux</span>
-<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">bar</span><span style="color: #000000">       </span><span style="color: #008000">// qux</span>
-<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">d</span><span style="color: #000000">         </span><span style="color: #008000">// baz</span>
-<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">a</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">   </span><span style="color: #008000">// TypeError</span>
-</code></pre>
-			<p>FP adepts may use <code>createDeepProxy</code> factory instead of <code>DeepProxy</code> class and get some magic.</p>
-			<pre><code class="language-ts"><span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">createDeepProxy</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@qiwi/deep-proxy&#039;</span>
-
-<span style="color: #008000">// Regular usage case</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">handler</span><span style="color: #000000"> = ({</span><span style="color: #001080">DEFAULT</span><span style="color: #000000">}) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #0070C1">DEFAULT</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">proxy1</span><span style="color: #000000"> = </span><span style="color: #795E26">createDeepProxy</span><span style="color: #000000">(</span><span style="color: #001080">target</span><span style="color: #000000">, </span><span style="color: #001080">handler</span><span style="color: #000000">)</span>
-
-<span style="color: #008000">// Passing defaults through this context</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">customProxyFactory</span><span style="color: #000000"> = </span><span style="color: #001080">createDeepProxy</span><span style="color: #000000">.</span><span style="color: #795E26">bind</span><span style="color: #000000">({</span><span style="color: #001080">handler</span><span style="color: #000000">})</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">proxy2</span><span style="color: #000000"> = </span><span style="color: #795E26">customProxyFactory</span><span style="color: #000000">(</span><span style="color: #001080">target</span><span style="color: #000000">)</span>
-</code></pre>
-			<p>All the traps follow to the single handler, so you&#39;re able to build various complex conditions in one place. This approach might be useful if you need some kind of &quot;rich&quot; model, but don&#39;t want to complicate DTO.  </p>
-			<pre><code class="language-typescript"><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">path</span><span style="color: #000000">.</span><span style="color: #001080">length</span><span style="color: #000000"> &gt; </span><span style="color: #098658">10</span><span style="color: #000000">) {</span>
-<span style="color: #000000">  </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">prop</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000"> || [</span><span style="color: #A31515">&#039;get&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;set&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;ownKeys&#039;</span><span style="color: #000000">].</span><span style="color: #795E26">includes</span><span style="color: #000000">(</span><span style="color: #001080">trapName</span><span style="color: #000000">)) {</span>
-<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0070C1">DEFAULT</span>
-<span style="color: #000000">  }</span>
-
-<span style="color: #000000">  </span><span style="color: #AF00DB">throw</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Error</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Bla-bla&#039;</span><span style="color: #000000">)</span>
-<span style="color: #000000">}</span>
-
-<span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">trapName</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;set&#039;</span><span style="color: #000000"> &amp;&amp; </span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">value</span><span style="color: #000000"> !== </span><span style="color: #A31515">&#039;number&#039;</span><span style="color: #000000">) {</span>
-<span style="color: #000000">  </span><span style="color: #AF00DB">throw</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">TypeError</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;only `number` type is allowed&#039;</span><span style="color: #000000">)</span>
-<span style="color: #000000">}</span>
-
-<span style="color: #008000">// and so on</span>
-
-<span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0070C1">DEFAULT</span>
-</code></pre>
-			<p>Another example. Imagine a client which uses an unstable channel with 10% of loss.</p>
-			<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">client</span><span style="color: #000000"> = </span><span style="color: #795E26">createClient</span><span style="color: #000000">({...</span><span style="color: #001080">opts</span><span style="color: #000000">})</span>
-<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">client</span><span style="color: #000000">.</span><span style="color: #795E26">foo</span><span style="color: #000000">(...</span><span style="color: #001080">args</span><span style="color: #000000">) </span><span style="color: #008000">// 90% of success</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">clientWithRetry</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">DeepProxy</span><span style="color: #000000">(</span><span style="color: #001080">client</span><span style="color: #000000">, ({</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">trapName</span><span style="color: #000000">}: </span><span style="color: #267F99">THandlerContext</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">trapName</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;get&#039;</span><span style="color: #000000">) {</span>
-<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">value</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;function&#039;</span><span style="color: #000000">) {</span>
-<span style="color: #000000">      </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #795E26">retryify</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">)</span>
-<span style="color: #000000">    }</span>
-<span style="color: #000000">  </span>
-<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">value</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;object&#039;</span><span style="color: #000000"> &amp;&amp; </span><span style="color: #001080">value</span><span style="color: #000000"> !== </span><span style="color: #0000FF">null</span><span style="color: #000000">) {</span>
-<span style="color: #000000">      </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0070C1">PROXY</span>
-<span style="color: #000000">    }</span>
-<span style="color: #000000">  }</span>
-
-<span style="color: #000000">  </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0070C1">DEFAULT</span>
-<span style="color: #000000">})</span>
-<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">clientWithRetry</span><span style="color: #000000">.</span><span style="color: #795E26">foo</span><span style="color: #000000">(...</span><span style="color: #001080">args</span><span style="color: #000000">) </span><span style="color: #008000">// 99% of success</span>
-</code></pre>
-			<p>Metrics, debugging, throttling — all becomes better with deep proxy.</p>
-			<a href="#directives" id="directives" style="color: inherit; text-decoration: none;">
-				<h2>Directives</h2>
-			</a>
-			<table>
-				<thead>
-					<tr>
-						<th>Directive</th>
-						<th>Description</th>
-					</tr>
-				</thead>
-				<tbody><tr>
-						<td><code>DEFAULT</code></td>
-						<td>Returns standard flow control. The current operation (get, set, ownKeys, etc) will be performed as without proxy.</td>
-					</tr>
-					<tr>
-						<td><code>PROXY</code></td>
-						<td>Returns a proxy of nested object with parent&#39;s proxy handler.</td>
-					</tr>
-			</tbody></table>
-			<p>A bit more sugar on top: by default <code>PROXY</code> directive uses <code>value</code> from context, but you can pass your own.</p>
-			<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">proxy</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">DeepProxy</span><span style="color: #000000">({</span><span style="color: #001080">foo:</span><span style="color: #000000"> {</span><span style="color: #001080">bar:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">}}, ({</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">trapName</span><span style="color: #000000">}) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">trapName</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;get&#039;</span><span style="color: #000000"> &amp;&amp; </span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">value</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;object&#039;</span><span style="color: #000000"> &amp;&amp; </span><span style="color: #001080">value</span><span style="color: #000000"> !== </span><span style="color: #0000FF">null</span><span style="color: #000000">) {</span>
-<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #795E26">PROXY</span><span style="color: #000000">({</span><span style="color: #001080">baz:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;qux&#039;</span><span style="color: #000000">})</span>
-<span style="color: #000000">  }</span>
-
-<span style="color: #000000">  </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0070C1">DEFAULT</span>
-<span style="color: #000000">})</span>
-<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">foo</span><span style="color: #000000">.</span><span style="color: #001080">baz</span><span style="color: #000000"> </span><span style="color: #008000">// &#039;qux&#039;</span>
-</code></pre>
-			<a href="#thandlercontext" id="thandlercontext" style="color: inherit; text-decoration: none;">
-				<h2>THandlerContext</h2>
-			</a>
-			<pre><code class="language-ts"><span style="color: #0000FF">type</span><span style="color: #000000"> </span><span style="color: #267F99">THandlerContext</span><span style="color: #000000">&lt;</span><span style="color: #267F99">T</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">TTarget</span><span style="color: #000000">&gt; = {</span>
-<span style="color: #000000">  </span><span style="color: #001080">target</span><span style="color: #000000">: </span><span style="color: #267F99">T</span><span style="color: #000000">               </span><span style="color: #008000">// proxy target object/function</span>
-<span style="color: #000000">  </span><span style="color: #001080">trapName</span><span style="color: #000000">: </span><span style="color: #267F99">TTrapName</span><span style="color: #000000">     </span><span style="color: #008000">// proxy handler trap: get, set, ownKeys and so on</span>
-<span style="color: #000000">  </span><span style="color: #001080">traps</span><span style="color: #000000">: </span><span style="color: #267F99">TTraps</span><span style="color: #000000">           </span><span style="color: #008000">// proxy handler map reference</span>
-<span style="color: #000000">  </span><span style="color: #001080">root</span><span style="color: #000000">: </span><span style="color: #267F99">TTarget</span><span style="color: #000000">           </span><span style="color: #008000">// root level proxy&#039;s target</span>
-<span style="color: #000000">  </span><span style="color: #001080">args</span><span style="color: #000000">: </span><span style="color: #267F99">any</span><span style="color: #000000">[]             </span><span style="color: #008000">// trap method arguments as is</span>
-<span style="color: #000000">  </span><span style="color: #001080">path</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">[]          </span><span style="color: #008000">// path to current proxy from root</span>
-<span style="color: #000000">  </span><span style="color: #001080">key</span><span style="color: #000000">?: </span><span style="color: #0000FF">keyof</span><span style="color: #000000"> </span><span style="color: #267F99">T</span><span style="color: #000000">           </span><span style="color: #008000">// prop key if defined in trap args</span>
-<span style="color: #000000">  </span><span style="color: #001080">value</span><span style="color: #000000">: </span><span style="color: #267F99">any</span><span style="color: #000000">              </span><span style="color: #008000">// current field value by key</span>
-<span style="color: #000000">  </span><span style="color: #001080">newValue</span><span style="color: #000000">?: </span><span style="color: #267F99">any</span><span style="color: #000000">          </span><span style="color: #008000">// new assigned value (#set())</span>
-<span style="color: #000000">  </span><span style="color: #001080">handler</span><span style="color: #000000">: </span><span style="color: #267F99">TProxyHandler</span><span style="color: #000000">  </span><span style="color: #008000">// handler reference</span>
-<span style="color: #000000">  </span><span style="color: #001080">PROXY</span><span style="color: #000000">: </span><span style="color: #267F99">symbol</span><span style="color: #000000">           </span><span style="color: #008000">// directives</span>
-<span style="color: #000000">  </span><span style="color: #001080">DEFAULT</span><span style="color: #000000">: </span><span style="color: #267F99">symbol</span>
-<span style="color: #000000">  </span><span style="color: #001080">proxy</span><span style="color: #000000">: </span><span style="color: #267F99">TTarget</span><span style="color: #000000">          </span><span style="color: #008000">// proxy reference</span>
-<span style="color: #000000">}</span>
-</code></pre>
-			<a href="#caching" id="caching" style="color: inherit; text-decoration: none;">
-				<h2>Caching</h2>
-			</a>
-			<p><code>createDeepProxy</code> factory returns the stored proxy reference when all the arguments matched one of the previous calls:</p>
-			<ol>
-				<li><code>target</code> refs are strictly equal</li>
-				<li><code>root</code> refs equal too</li>
-				<li><code>path</code> values match</li>
-			</ol>
-			<p>Note, this is not a regular memoization, but a loosely coupled <code>WeakMap</code>, so unused proxies can be cleaned up by GC.</p>
-			<pre><code class="language-typescript"><span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">type</span><span style="color: #000000"> </span><span style="color: #267F99">TProxyCache</span><span style="color: #000000"> = {</span>
-<span style="color: #000000">  </span><span style="color: #008000">// root object refers to some targets objects,</span>
-<span style="color: #000000">  </span><span style="color: #008000">// that refer to map, that binds nested paths with their traps</span>
-<span style="color: #000000">  </span><span style="color: #001080">traps</span><span style="color: #000000">: </span><span style="color: #267F99">WeakMap</span><span style="color: #000000">&lt;</span><span style="color: #267F99">TTarget</span><span style="color: #000000">, </span><span style="color: #267F99">WeakMap</span><span style="color: #000000">&lt;</span><span style="color: #267F99">TTarget</span><span style="color: #000000">, </span><span style="color: #267F99">Map</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">, </span><span style="color: #267F99">TTraps</span><span style="color: #000000">&gt;&gt;&gt;</span>
-
-<span style="color: #000000">  </span><span style="color: #008000">// And these traps refer to proxies</span>
-<span style="color: #000000">  </span><span style="color: #001080">proxies</span><span style="color: #000000">: </span><span style="color: #267F99">WeakMap</span><span style="color: #000000">&lt;</span><span style="color: #267F99">TTraps</span><span style="color: #000000">, </span><span style="color: #267F99">TProxy</span><span style="color: #000000">&lt;</span><span style="color: #267F99">TTarget</span><span style="color: #000000">&gt;&gt;</span>
-<span style="color: #000000">}</span>
-</code></pre>
-			<a href="#note" id="note" style="color: inherit; text-decoration: none;">
-				<h2>Note</h2>
-			</a>
-			<p>Proxies are <a href="https://github.com/justinjmoses/node-es6-proxy-benchmark">slow</a>. <a href="https://thecodebarbarian.com/thoughts-on-es6-proxies-performance">Very slow</a>. Use them wisely with care.</p>
-			<a href="#alternatives-amp-refs" id="alternatives-amp-refs" style="color: inherit; text-decoration: none;">
-				<h2>Alternatives &amp; Refs</h2>
-			</a>
-			<ul>
-				<li><a href="https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots">tc39.es/proxy-object</a></li>
-				<li><a href="https://stackoverflow.com/questions/43177855/how-to-create-a-deep-proxy">stackoverflow/how-to-create-a-deep-proxy</a></li>
-				<li><a href="https://github.com/samvv/js-proxy-deep">samvv/js-proxy-deep</a></li>
-				<li><a href="https://github.com/lukigarazus/deep-proxy">lukigarazus/deep-proxy</a></li>
-				<li><a href="https://github.com/cronvel/nested-proxies">cronvel/nested-proxies</a></li>
-				<li><a href="https://github.com/CharlesStover/deep-proxy-polyfill">CharlesStover/deep-proxy-polyfill</a></li>
-			</ul>
-			<a href="#license" id="license" style="color: inherit; text-decoration: none;">
-				<h2>License</h2>
-			</a>
-			<p><a href="./LICENSE">MIT</a></p>
-		</div>
-		<div style="position:relative;"><a name="typedoc-main-index" class="tsd-anchor"></a></div>
 		<section class="tsd-panel-group tsd-index-group">
 			<h2>Index</h2>
 			<section class="tsd-panel tsd-index-panel">
 				<div class="tsd-index-content">
 					<section class="tsd-index-section ">
-						<h3>Modules</h3>
+						<h3>Variables</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-module"><a href="modules/cache.html" class="tsd-kind-icon">cache</a></li>
-							<li class="tsd-kind-module"><a href="modules/index.html" class="tsd-kind-icon">index</a></li>
-							<li class="tsd-kind-module"><a href="modules/interface.html" class="tsd-kind-icon">interface</a></li>
-							<li class="tsd-kind-module"><a href="modules/proxy.html" class="tsd-kind-icon">proxy</a></li>
+							<li class="tsd-kind-variable tsd-parent-kind-module"><a href="proxy.html#default" class="tsd-kind-icon">DEFAULT</a></li>
+							<li class="tsd-kind-variable tsd-parent-kind-module"><a href="proxy.html#deepproxy" class="tsd-kind-icon">Deep<wbr>Proxy</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section ">
+						<h3>Functions</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="proxy.html#createdeepproxy" class="tsd-kind-icon">create<wbr>Deep<wbr>Proxy</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="proxy.html#defaultproxyhandler" class="tsd-kind-icon">default<wbr>Proxy<wbr>Handler</a></li>
 						</ul>
 					</section>
 				</div>
+			</section>
+		</section>
+		<section class="tsd-panel-group tsd-member-group ">
+			<h2>Variables</h2>
+			<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+				<a name="default" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> DEFAULT</h3>
+				<div class="tsd-signature tsd-kind-icon">DEFAULT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">typeof </span><a href="proxy.html#default" class="tsd-signature-type" data-tsd-kind="Variable">DEFAULT</a><span class="tsd-signature-symbol"> = ...</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/qiwi/deep-proxy/blob/98d3cd6/src/main/ts/proxy.ts#L17">proxy.ts:17</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+				<a name="deepproxy" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> Deep<wbr>Proxy</h3>
+				<div class="tsd-signature tsd-kind-icon">Deep<wbr>Proxy<span class="tsd-signature-symbol">:</span> <a href="../interfaces/interface.deepproxyconstructor.html" class="tsd-signature-type" data-tsd-kind="Interface">DeepProxyConstructor</a><span class="tsd-signature-symbol"> = ...</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/qiwi/deep-proxy/blob/98d3cd6/src/main/ts/proxy.ts#L138">proxy.ts:138</a></li>
+					</ul>
+				</aside>
+			</section>
+		</section>
+		<section class="tsd-panel-group tsd-member-group ">
+			<h2>Functions</h2>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+				<a name="createdeepproxy" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> create<wbr>Deep<wbr>Proxy</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">create<wbr>Deep<wbr>Proxy&lt;T&gt;<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, handler<span class="tsd-signature-symbol">?: </span><a href="interface.html#tproxyhandler" class="tsd-signature-type" data-tsd-kind="Type alias">TProxyHandler</a>, path<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, root<span class="tsd-signature-symbol">?: </span><a href="interface.html#ttarget" class="tsd-signature-type" data-tsd-kind="Type alias">TTarget</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/qiwi/deep-proxy/blob/98d3cd6/src/main/ts/proxy.ts#L111">proxy.ts:111</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>T<span class="tsd-signature-symbol">: </span><a href="interface.html#ttarget" class="tsd-signature-type" data-tsd-kind="Type alias">TTarget</a></h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>target: <span class="tsd-signature-type">T</span></h5>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> handler: <a href="interface.html#tproxyhandler" class="tsd-signature-type" data-tsd-kind="Type alias">TProxyHandler</a></h5>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> path: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> root: <a href="interface.html#ttarget" class="tsd-signature-type" data-tsd-kind="Type alias">TTarget</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+				<a name="defaultproxyhandler" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> default<wbr>Proxy<wbr>Handler</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">default<wbr>Proxy<wbr>Handler&lt;T&gt;<span class="tsd-signature-symbol">(</span>proxyContext<span class="tsd-signature-symbol">: </span><a href="interface.html#thandlercontext" class="tsd-signature-type" data-tsd-kind="Type alias">THandlerContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/qiwi/deep-proxy/blob/98d3cd6/src/main/ts/proxy.ts#L109">proxy.ts:109</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>T</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>proxyContext: <a href="interface.html#thandlercontext" class="tsd-signature-type" data-tsd-kind="Type alias">THandlerContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+					</li>
+				</ul>
 			</section>
 		</section>
 		<footer>
