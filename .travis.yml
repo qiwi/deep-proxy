@@ -1,5 +1,5 @@
 language: node_js
-node_js: 14
+node_js: 16
 os: linux
 install: skip
 
@@ -24,11 +24,15 @@ jobs:
       stage: test
       os: linux
       node_js: 12
-      script: yarn test
+      script: yarn test:unit
       workspaces:
         use: shared
+
     - <<: *test
       node_js: 14
+
+    - <<: *test
+      node_js: 16
       before_script:
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         - chmod +x ./cc-test-reporter
