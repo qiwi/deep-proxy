@@ -64,7 +64,7 @@ const customProxyFactory = createDeepProxy.bind({handler})
 const proxy2 = customProxyFactory(target)
 ```
 
-All the traps follow to the single handler, so you're able to build various complex conditions in one place. This approach might be useful if you need some kind of "rich" model, but don't want to complicate DTO.  
+All the traps follow to the single handler, so you're able to build various complex conditions in one place. This approach might be useful if you need some kind of "rich" model, but you don't want to complicate DTO.  
 ```typescript
 if (path.length > 10) {
   if (prop === 'foo' || ['get', 'set', 'ownKeys'].includes(trapName)) {
