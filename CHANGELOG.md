@@ -1,3 +1,10 @@
+## [1.8.3](https://github.com/qiwi/deep-proxy/compare/v1.8.2...v1.8.3) (2021-08-15)
+
+
+### Bug Fixes
+
+* update deps, fix some vuls ([6f852e3](https://github.com/qiwi/deep-proxy/commit/6f852e336974b752bf2a1af2f4bc5de855f824b5))
+
 ## [1.8.2](https://github.com/qiwi/deep-proxy/compare/v1.8.1...v1.8.2) (2021-04-28)
 
 

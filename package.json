@@ -1,6 +1,6 @@
 {
   "name": "@qiwi/deep-proxy",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "private": false,
   "description": "Deep proxy implementation for TypeScript",
   "source": "src/main/ts/index.ts",
