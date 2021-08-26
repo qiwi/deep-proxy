@@ -3589,10 +3589,10 @@ eslint-config-prettier@^8.3.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.3.0.tgz#f7471b20b6fe8a9a9254cc684454202886a2dd7a"
   integrity sha512-BgZuLUSeKzvlL/VUjx/Yb787VQ26RU3gGjA3iiFvdsp/2bMfVIWUVP7tjxtjS0e+HP409cPlPvNkQloz8C91ew==
 
-eslint-config-qiwi@^1.13.4:
-  version "1.13.4"
-  resolved "https://registry.yarnpkg.com/eslint-config-qiwi/-/eslint-config-qiwi-1.13.4.tgz#4977b50684b8a4cea82f98821593dceb7c918fe9"
-  integrity sha512-qYmw1plYlJU27CoEtAZ6aJJKYaU3iLyEZadDvlVlt+ni+sWIA5hNXBy1Tq5oJzCgNs+TS4zHydtQ1kKupJ6Yhg==
+eslint-config-qiwi@^1.13.5:
+  version "1.13.5"
+  resolved "https://registry.yarnpkg.com/eslint-config-qiwi/-/eslint-config-qiwi-1.13.5.tgz#5bd50a5c18db0411692265f2258d89837768d5bf"
+  integrity sha512-bR71MG1Cf+ErMppgIJ66vyy/BeCI0ktjPHu88YQhimpDaYEwUIxrWxG3xcHMP7gMpVt5JHR5u9vdK36Wk2ojJQ==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^4.28.2"
     "@typescript-eslint/parser" "^4.28.2"
@@ -3605,7 +3605,7 @@ eslint-config-qiwi@^1.13.4:
     eslint-plugin-react "^7.24.0"
     eslint-plugin-react-hooks "^4.2.0"
     eslint-plugin-simple-import-sort "^7.0.0"
-    eslint-plugin-sonarjs "^0.9.1"
+    eslint-plugin-sonarjs "^0.10.0"
     eslint-plugin-unicorn "^35.0.0"
     typescript "*"
 
@@ -3716,10 +3716,10 @@ eslint-plugin-simple-import-sort@^7.0.0:
   resolved "https://registry.yarnpkg.com/eslint-plugin-simple-import-sort/-/eslint-plugin-simple-import-sort-7.0.0.tgz#a1dad262f46d2184a90095a60c66fef74727f0f8"
   integrity sha512-U3vEDB5zhYPNfxT5TYR7u01dboFZp+HNpnGhkDB2g/2E4wZ/g1Q9Ton8UwCLfRV9yAKyYqDh62oHOamvkFxsvw==
 
-eslint-plugin-sonarjs@^0.9.1:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-sonarjs/-/eslint-plugin-sonarjs-0.9.1.tgz#a3c63ab0d267bfb69863159e42c8081b01fd3ac6"
-  integrity sha512-KKFofk1LPjGHWeAZijYWv32c/C4mz+OAeBNVxhxHu1hknrTOhu415MWC8qKdAdsmOlBPShs9evM4mI1o7MNMhw==
+eslint-plugin-sonarjs@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-sonarjs/-/eslint-plugin-sonarjs-0.10.0.tgz#2b520c6d0dbdecbea98cd82f5cb84fc5c3d2b954"
+  integrity sha512-FBRIBmWQh2UAfuLSnuYEfmle33jIup9hfkR0X8pkfjeCKNpHUG8qyZI63ahs3aw8CJrv47QJ9ccdK3ZxKH016A==
 
 eslint-plugin-unicorn@^35.0.0:
   version "35.0.0"
@@ -7774,10 +7774,15 @@ typescript-compiler@^1.4.1-2:
   resolved "https://registry.yarnpkg.com/typescript-compiler/-/typescript-compiler-1.4.1-2.tgz#ba4f7db22d91534a1929d90009dce161eb72fd3f"
   integrity sha1-uk99si2RU0oZKdkACdzhYety/T8=
 
-typescript@*, typescript@4.3.5:
+typescript@*:
   version "4.3.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.3.5.tgz#4d1c37cc16e893973c45a06886b7113234f119f4"
   integrity sha512-DqQgihaQ9cUrskJo9kIyW/+g0Vxsk8cDtZ52a3NGh0YNTfpUSArXSohyUGnvbPazEPLu398C0UxmKSOrPumUzA==
+
+typescript@4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.2.tgz#6d618640d430e3569a1dfb44f7d7e600ced3ee86"
+  integrity sha512-gzP+t5W4hdy4c+68bfcv0t400HVJMMd2+H9B7gae1nQlBzCqvrXX+6GL/b3GAgyTH966pzrZ70/fRjwAtZksSQ==
 
 typescript@^4.0.2:
   version "4.1.2"
