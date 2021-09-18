@@ -1,12 +1,12 @@
 {
   "name": "@qiwi/deep-proxy",
   "out": "./docs",
-  "entryPoints": ["src/main"],
+  "entryPoints": ["src/main/ts/"],
   "exclude": ["src/test", "**/node_modules/**", "paralleljs"],
   "externalPattern": ["**/node_modules/**"],
   "excludePrivate": false,
   "hideGenerator": true,
   "readme": "README.md",
-  "theme": "minimal",
+  "theme": "default",
   "tsconfig": "./tsconfig.es5.json"
 }
