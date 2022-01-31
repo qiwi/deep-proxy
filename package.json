@@ -53,7 +53,7 @@
   "author": "Anton Golub <a.golub@qiwi.com>",
   "license": "MIT",
   "devDependencies": {
-    "@qiwi/libdefkit": "^3.1.1",
+    "@qiwi/libdefkit": "^4.0.0",
     "@qiwi/substrate": "^1.20.10",
     "@swissquote/crafty-preset-jest": "^1.15.0",
     "@types/jest": "^27.0.1",
