@@ -2,7 +2,6 @@
 Deep proxy implementation for TypeScript
 
 [![Build Status](https://travis-ci.com/qiwi/deep-proxy.svg?branch=master)](https://travis-ci.com/qiwi/deep-proxy)
-[![David](https://img.shields.io/david/qiwi/deep-proxy)](https://david-dm.org/qiwi/deep-proxy)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b8bb8d6c35bc74c123a5/maintainability)](https://codeclimate.com/github/qiwi/deep-proxy/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/b8bb8d6c35bc74c123a5/test_coverage)](https://codeclimate.com/github/qiwi/deep-proxy/test_coverage)
 [![npm (scoped)](https://img.shields.io/npm/v/@qiwi/deep-proxy)](https://www.npmjs.com/package/@qiwi/deep-proxy)
