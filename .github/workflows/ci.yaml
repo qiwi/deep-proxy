@@ -61,9 +61,17 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      - run: yarn
-      - name: Unit test only
-        run: yarn test
+
+      - name: Yarn install
+        run: |
+          sudo apt-get install -y moreutils
+          yarn
+
+      - name: Unit tests
+        # https://github.com/facebook/jest/issues/12740
+        run: |
+          yarn test
+          sed 's/src\/src/src/g' coverage/lcov.info | sponge coverage/lcov.info
 
       - name: Update coverage
         if: github.ref == 'refs/heads/master'
