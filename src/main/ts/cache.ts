@@ -1,4 +1,4 @@
-import { TProxy, TProxyCache, TTarget, TTraps } from './interface'
+import type { TProxy, TProxyCache, TTarget, TTraps } from './interface'
 
 const cache: TProxyCache = {
   proxies: new WeakMap(),

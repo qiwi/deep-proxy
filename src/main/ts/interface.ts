@@ -1,3 +1,5 @@
+export {}
+
 // eslint-disable-next-line
 export type TTarget = (object | Function) & Record<any, any>
 

@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import {
+import type {
   TTarget,
   TProxy,
   TProxyFactory,
