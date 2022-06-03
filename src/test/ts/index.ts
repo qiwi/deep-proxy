@@ -26,7 +26,7 @@ const simpleNestHandler: TProxyHandler = ({
 }
 
 describe('DeepProxy', () => {
-  it('works exactly like in usage example', () => {
+  it('works exactly like in usage examples', () => {
     const target = { foo: 'bar', a: { b: 'c' } }
     const proxy = new DeepProxy(
       target,
@@ -231,6 +231,20 @@ describe('DeepProxy', () => {
     expect(proxy.foo.bar).toBe(bar1)
     expect(proxy.foo).not.toBe(foo)
     expect(foo.bar).toBe(bar)
+  })
+
+  it('can be applied to callables', () => {
+    const target = (v: any) => v +'-test' // eslint-disable-line
+    const proxy = new DeepProxy(target, ({trapName, args, DEFAULT}) => {
+      if (trapName === 'apply') {
+        const [t,, params] = args
+        return t(params.map((v: any) => v.toUpperCase()))
+      }
+
+      return DEFAULT
+    })
+
+    expect(proxy('test')).toBe('TEST-test')
   })
 
   describe('directives', () => {
