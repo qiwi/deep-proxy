@@ -8,7 +8,10 @@ Deep proxy implementation for TypeScript
 
 ## Install
 ```shell script
+# npm
 npm i @qiwi/deep-proxy
+
+# yarn
 yarn add @qiwi/deep-proxy
 ```
 
@@ -102,13 +105,31 @@ const clientWithRetry = new DeepProxy(client, ({value, trapName}: THandlerContex
 })
 await clientWithRetry.foo(...args) // 99% of success
 ```
-Metrics, debugging, throttling — all becomes better with deep proxy.
+Metrics, debugging, throttling — all becomes better with the deep proxy.
+
+## Traps
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
+```js
+'defineProperty',
+'deleteProperty',
+'apply',
+'construct',
+'get',
+'getOwnPropertyDescriptor',
+'getPrototypeOf',
+'has',
+'isExtensible',
+'ownKeys',
+'preventExtensions',
+'set',
+'setPrototypeOf'
+```
 
 ## Directives
-|Directive|Description
-|---|---
-|`DEFAULT`| Returns standard flow control. The current operation (get, set, ownKeys, etc) will be performed as without proxy.
-|`PROXY`| Returns a proxy of nested object with parent's proxy handler.
+| Directive | Description                                                                                                      |
+|-----------|------------------------------------------------------------------------------------------------------------------|
+| `DEFAULT` | Returns standard flow control. The current operation (get, set, ownKeys, etc) will be performed as without proxy.| 
+| `PROXY`   | Returns a proxy of nested object with parent's proxy handler.                                                    |
 
 A bit more sugar on top: by default `PROXY` directive uses `value` from context, but you can pass your own.
 ```typescript
