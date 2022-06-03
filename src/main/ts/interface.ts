@@ -25,7 +25,7 @@ export type THandlerContext<T extends TTarget> = {
   proxy: TProxy<T>
 }
 
-export type TProxyHandler = <T>(proxyContext: THandlerContext<T>) => any
+export type TProxyHandler = <T extends TTarget>(proxyContext: THandlerContext<T>) => any
 
 export type TProxyFactoryThis = {
   handler?: TProxyHandler
