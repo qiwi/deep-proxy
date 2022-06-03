@@ -8513,10 +8513,10 @@ ts-jest@^28.0.4:
     semver "7.x"
     yargs-parser "^20.x"
 
-tsc-esm-fix@^2.15.1:
-  version "2.15.1"
-  resolved "https://registry.yarnpkg.com/tsc-esm-fix/-/tsc-esm-fix-2.15.1.tgz#125ff3e3ddc3f248eb166de7820f6358a44c684b"
-  integrity sha512-HdCmPswO1hGl98ijH9ACw00NKbeAvoSj1Ptcd2cStM/gKXtRrCeApMZ+WBRTAs/oAspr/LhhS1DHAuKnbmxRLw==
+tsc-esm-fix@^2.16.0:
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/tsc-esm-fix/-/tsc-esm-fix-2.16.0.tgz#12e6f9a34a930d0cf70ded263d733c65e0a39361"
+  integrity sha512-cRfxwkzue72D5BGuYgxZtLBeWgtzeLfTQvIYVeY9KWeV+cB7Dle/O8UI1KXPGsJ1j7rmoZWkDBoKMgEFVyg/4Q==
   dependencies:
     "@types/fs-extra" "^9.0.13"
     fs-extra "^10.1.0"
@@ -8639,10 +8639,10 @@ typescript-compiler@^1.4.1-2:
   resolved "https://registry.yarnpkg.com/typescript-compiler/-/typescript-compiler-1.4.1-2.tgz#ba4f7db22d91534a1929d90009dce161eb72fd3f"
   integrity sha1-uk99si2RU0oZKdkACdzhYety/T8=
 
-typescript@4.7.2:
-  version "4.7.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.7.2.tgz#1f9aa2ceb9af87cca227813b4310fff0b51593c4"
-  integrity sha512-Mamb1iX2FDUpcTRzltPxgWMKy3fhg0TN378ylbktPGPK/99KbDtMQ4W1hwgsbPAsG3a0xKa1vmw4VKZQbkvz5A==
+typescript@4.7.3:
+  version "4.7.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.7.3.tgz#8364b502d5257b540f9de4c40be84c98e23a129d"
+  integrity sha512-WOkT3XYvrpXx4vMMqlD+8R8R37fZkjyLGlxavMc4iB8lrl8L0DeTcHbYgw/v0N/z9wAFsgBhcsF0ruoySS22mA==
 
 typescript@^4.1.3:
   version "4.1.3"
