@@ -151,16 +151,15 @@ type THandlerContext<T extends TTarget> = {
   parameters: any[]       // trap arguments as is: [target, *, *, *]
   name: keyof T,          // property name
   val: any,               // property value
-  receiver: any,          // receiver ('get' trap) or proxy ('set' trap)
+  receiver: any,          // receiver ('get' or 'set' traps)
   args: any[],            // arguments array ('apply' trap)
-  descriptor: PropertyDescriptor,   // property descriptor ('defineProperty' trap)
+  descriptor: PropertyDescriptor,   // property descriptor ('defineProperty', 'deleteProperty' trap)
   thisValue: any,         // this context of 'apply' trap
   prototype: any,         // prototype of 'setPrototypeOf' trap
     
   trapName: TTrapName     // proxy handler trap: get, set, ownKeys and so on
   traps: TTraps           // proxy handler map reference
   root: TTarget           // root level proxy's target
-  args: any[]             // alias for `paraments`. Legecy. Deprecated.
   path: string[]          // path to current proxy from root
   key?: keyof T           // prop key if defined in trap args
   value: any              // current field value by key
