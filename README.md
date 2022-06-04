@@ -147,10 +147,19 @@ proxy.foo.baz // 'qux'
 ```ts
 type THandlerContext<T extends TTarget> = {
   target: T               // proxy target object/function
+
+  parameters: any[]       // trap arguments as is: [target, *, *, *]
+  name: keyof T,          // property name
+  val: any,               // property value
+  receiver: any,          // receiver ('get' trap) or proxy ('set' trap)
+  args: any[],            // arguments array ('apply' trap)
+  descriptor: PropertyDescriptor,   // property descriptor ('defineProperty' trap)
+  thisValue: any,         // this context of 'apply' trap
+  prototype: any,         // prototype of 'setPrototypeOf' trap
+    
   trapName: TTrapName     // proxy handler trap: get, set, ownKeys and so on
   traps: TTraps           // proxy handler map reference
   root: TTarget           // root level proxy's target
-  parameters: any[]       // trap method arguments as is
   args: any[]             // alias for `paraments`. Legecy. Deprecated.
   path: string[]          // path to current proxy from root
   key?: keyof T           // prop key if defined in trap args
