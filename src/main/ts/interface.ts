@@ -41,7 +41,7 @@ export type TProxyFactoryThis = {
   root?: TTarget
 }
 
-export type TProxyFactory<T extends TTarget = TTarget> = (
+export type TProxyFactory<P extends TTarget = TTarget> = <T extends P>(
   this: TProxyFactoryThis | void,
   target: T,
   handler?: TProxyHandler,
