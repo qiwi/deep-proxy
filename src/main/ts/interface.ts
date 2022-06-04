@@ -1,7 +1,7 @@
 export {}
 
 // eslint-disable-next-line
-export type TTarget = (object | Function) & Record<any, any>
+export type TTarget = (((...args: any[]) => any) | object) & Record<any, any>
 
 export type TProxy<T extends TTarget> = T
 
@@ -11,10 +11,18 @@ export type TTraps = ProxyHandler<TTarget>
 
 export type THandlerContext<T extends TTarget> = {
   target: T
+  name: keyof T,
+  val: any,
+  receiver: any,
+  args: any[],
+  descriptor: PropertyDescriptor,
+  thisValue: any,
+  prototype: any,
+
   trapName: TTrapName
   traps: TTraps
   root: TTarget
-  args: any[]
+  parameters: any[]
   path: string[]
   value: any
   newValue?: any

@@ -29,24 +29,87 @@ const trapsWithKey = [
   'getOwnPropertyDescriptor',
 ]
 
+const parseParameters = <T>(trapName: TTrapName, parameters: [T, ...any[]]): {
+  target: T,
+  name: keyof T,
+  val: any,
+  receiver: any,
+  args: any[],
+  descriptor: PropertyDescriptor,
+  thisValue: any,
+  prototype: any,
+
+} => {
+  // https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Proxy
+  let target, name, val, receiver, args, descriptor, thisValue, prototype
+
+  // prettier-ignore
+  switch (trapName) {
+    case 'get':
+      [target, name, receiver] = parameters
+      break
+    case 'set':
+      [target, name, val, receiver] = parameters
+      break
+    case 'deleteProperty':
+    case 'defineProperty':
+      [target, descriptor] = parameters
+      break
+    case 'has':
+    case 'getOwnPropertyDescriptor':
+      [target, name] = parameters
+      break
+    case 'apply':
+      [target, thisValue, args] = parameters
+      break
+     case 'construct':
+      [target, args] = parameters
+      break
+    case 'setPrototypeOf':
+      [target, prototype] = parameters
+       break
+    case 'preventExtensions':
+    case 'isExtensible':
+    case 'ownKeys':
+    case 'getPrototypeOf':
+    default:
+      [target] = parameters
+  }
+  return {
+    target,
+    name,
+    receiver,
+    val,
+    args,
+    descriptor,
+    thisValue,
+    prototype
+  }
+}
+
 const createHandlerContext = <T>(
   trapContext: TTrapContext,
-  target: T,
-  prop?: keyof T,
-  val?: any,
-  receiver?: any,
+  parameters: [T, ...any[]],
 ): THandlerContext<T> => {
-  const args = [target, prop, val, receiver]
   const { trapName, handler, traps, root, path } = trapContext
-  const key = trapsWithKey.includes(trapName) ? prop : undefined
+  const {target, name, val, receiver, args, descriptor, thisValue, prototype} = parseParameters(trapName, parameters)
+  const key = trapsWithKey.includes(trapName) ? name : undefined
   const newValue = trapName === 'set' ? val : undefined
 
   // prettier-ignore
   return {
+    parameters,
     target,
+    name,
+    val,
+    args,
+    descriptor,
+    receiver,
+    thisValue,
+    prototype,
+
     trapName,
     traps,
-    args,
     path,
     handler,
     key,
@@ -61,13 +124,10 @@ const createHandlerContext = <T>(
 
 const trap = function <T extends TTarget>(
   this: TTrapContext,
-  target: T,
-  prop?: keyof T,
-  val?: any,
-  receiver?: any,
+  ...parameters: [T, ...any[]]
 ) {
   const { trapName, handler } = this
-  const handlerContext = createHandlerContext(this, target, prop, val, receiver)
+  const handlerContext = createHandlerContext(this, parameters)
   const { PROXY, DEFAULT } = handlerContext
   const result = handler(handlerContext)
 
@@ -77,7 +137,7 @@ const trap = function <T extends TTarget>(
 
   if (result === DEFAULT) {
     // eslint-disable-next-line
-    return Reflect[trapName](target as TTarget & Function, prop, val, receiver)
+    return Reflect[trapName](...parameters as [TTarget & Function, any, any, any])
   }
 
   return result
