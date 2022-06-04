@@ -16,11 +16,14 @@ yarn add @qiwi/deep-proxy
 ```
 
 ## Key features
-* Single proxy handler with rich context instead of trap map
+* Single proxy handler with [rich context](#thandlercontext) instead of verbose traps mapping
 * Proxy self-reference in handler context (meaningful for methods binding)
 * JS, TS and Flow support
-* Directive shortcuts
-* Proxies caching
+* Magic directives:
+  * `PROXY` to provide infinitely nested proxies
+  * `DEFAULT` to provide default behavior
+* Caching
+* Trap params parsing
 
 ## Usage
 ```typescript
@@ -108,7 +111,7 @@ await clientWithRetry.foo(...args) // 99% of success
 Metrics, debugging, throttling — all becomes better with the deep proxy.
 
 ## Traps
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
+https://262.ecma-international.org/12.0/#table-proxy-handler-methods
 ```js
 'defineProperty',
 'deleteProperty',
@@ -172,7 +175,7 @@ type THandlerContext<T extends TTarget> = {
 ```
 
 ## Caching
-`createDeepProxy` factory returns the stored proxy reference when all the arguments matched one of the previous calls:
+`createDeepProxy` factory returns the stored proxy reference if the arguments match to any previous call:
 1) `target` refs are strictly equal
 2) `root` refs equal too
 3) `path` values match
