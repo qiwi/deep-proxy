@@ -235,9 +235,9 @@ describe('DeepProxy', () => {
 
   it('can be applied to callables', () => {
     const target = (v: any) => v +'-test' // eslint-disable-line
-    const proxy = new DeepProxy<typeof target>(target, ({target, trapName, args, DEFAULT}) => {
+    const proxy = new DeepProxy(target, ({trapName, args, DEFAULT}) => {
       if (trapName === 'apply') {
-        return (target as (...a: any[]) => any)(args.map((v: any) => v.toUpperCase()))
+        return target(args.map((v: any) => v.toUpperCase()))
       }
 
       return DEFAULT
