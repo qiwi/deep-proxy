@@ -29,10 +29,10 @@ export const addToCache = <T extends TTarget>(
 }
 
 export const getFromCache = <T extends TTarget>(
-  root: TTarget,
+  root: T,
   target: T,
   path: string[],
 ): TProxy<T> | undefined =>
   cache.proxies.get(
     cache.traps.get(root)?.get(target)?.get(getKey(path)) as TTraps,
-  )
+  ) as unknown as TProxy<T> | undefined

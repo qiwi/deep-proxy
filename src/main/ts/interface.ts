@@ -1,7 +1,7 @@
 export {}
 
 // eslint-disable-next-line
-export type TTarget = (((...args: any[]) => any) | object) & Record<any, any>
+export type TTarget = (object | ((...args: any[]) => any)) & Record<any, any>
 
 export type TProxy<T extends TTarget> = T
 
@@ -41,12 +41,12 @@ export type TProxyFactoryThis = {
   root?: TTarget
 }
 
-export type TProxyFactory = <T extends TTarget>(
+export type TProxyFactory<T extends TTarget = TTarget> = (
   this: TProxyFactoryThis | void,
   target: T,
   handler?: TProxyHandler,
   path?: string[],
-  root?: TTarget,
+  root?: T,
 ) => TProxy<T>
 
 export type TTrapContext = {

@@ -29,7 +29,7 @@ const trapsWithKey = [
   'getOwnPropertyDescriptor',
 ]
 
-const parseParameters = <T>(trapName: TTrapName, parameters: [T, ...any[]]): {
+const parseParameters = <T extends TTarget>(trapName: TTrapName, parameters: [T, ...any[]]): {
   target: T,
   name: keyof T,
   val: any,
@@ -87,7 +87,7 @@ const parseParameters = <T>(trapName: TTrapName, parameters: [T, ...any[]]): {
   }
 }
 
-const createHandlerContext = <T>(
+const createHandlerContext = <T extends TTarget>(
   trapContext: TTrapContext,
   parameters: [T, ...any[]],
 ): THandlerContext<T> => {
@@ -132,12 +132,13 @@ const trap = function <T extends TTarget>(
   const result = handler(handlerContext)
 
   if (result === PROXY) {
-    return PROXY(handlerContext.value as TTarget)
+    return PROXY(handlerContext.value)
   }
 
   if (result === DEFAULT) {
     // eslint-disable-next-line
-    return Reflect[trapName](...parameters as [TTarget & Function, any, any, any])
+    // @ts-ignore
+    return Reflect[trapName](...parameters)
   }
 
   return result
@@ -174,7 +175,7 @@ export const createDeepProxy: TProxyFactory = function <T extends TTarget>(
   handler?: TProxyHandler,
   path?: string[],
   root?: TTarget,
-) {
+): T {
   checkTarget(target)
 
   const _this: TProxyFactoryThis = { ...this }
@@ -184,11 +185,11 @@ export const createDeepProxy: TProxyFactory = function <T extends TTarget>(
   const _proxy = getFromCache(_root, target, _path)
 
   if (_proxy) {
-    return _proxy
+    return _proxy as T
   }
 
   const traps = createTraps(_handler, _root, _path)
-  const proxy = new Proxy(target, traps)
+  const proxy = new Proxy<T>(target, traps)
 
   addToCache(_root, target, _path, traps, proxy)
 
