@@ -150,7 +150,8 @@ type THandlerContext<T extends TTarget> = {
   trapName: TTrapName     // proxy handler trap: get, set, ownKeys and so on
   traps: TTraps           // proxy handler map reference
   root: TTarget           // root level proxy's target
-  args: any[]             // trap method arguments as is
+  parameters: any[]       // trap method arguments as is
+  args: any[]             // alias for `paraments`. Legecy. Deprecated.
   path: string[]          // path to current proxy from root
   key?: keyof T           // prop key if defined in trap args
   value: any              // current field value by key
