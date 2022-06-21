@@ -8,7 +8,11 @@
   "types": "./target/es6/index.d.ts",
   "module": "./target/bundle/deep-proxy.mjs",
   "exports": {
-    ".": "./target/es6/index.js"
+    ".": {
+      "import": "./target/es6/index.js",
+      "module": "./target/es6/index.js",
+      "require": "./target/bundle/deep-proxy.cjs"
+    }
   },
   "unpkg": "./target/bundle/deep-proxy.umd.js",
   "typescript": {
