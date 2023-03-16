@@ -61,7 +61,7 @@
   "license": "MIT",
   "devDependencies": {
     "@qiwi/libdefkit": "^4.0.8",
-    "@qiwi/substrate": "^1.20.15",
+    "@qiwi/substrate": "^2.0.0",
     "@swissquote/crafty-preset-jest": "^1.20.0",
     "@types/jest": "^29.2.3",
     "@types/node": "^18.11.9",
