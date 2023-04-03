@@ -1,5 +1,5 @@
 import { ICallable } from '@qiwi/substrate'
-import util from 'util'
+import util from 'node:util'
 
 import {
   createDeepProxy,

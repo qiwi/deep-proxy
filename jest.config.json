@@ -1,7 +1,7 @@
 {
   "testEnvironment": "node",
   "transform": {
-    "^.+\\.tsx?$": "ts-jest/legacy"
+    "^.+\\.tsx?$": ["ts-jest/legacy", {"tsconfig": "<rootDir>/tsconfig.test.json"}]
   },
   "transformIgnorePatterns": [
     "<rootDir>/target"
@@ -28,10 +28,5 @@
     "jsx",
     "json",
     "node"
-  ],
-  "globals": {
-    "ts-jest": {
-      "tsconfig": "<rootDir>/tsconfig.test.json"
-    }
-  }
+  ]
 }

@@ -20,14 +20,14 @@ const trapNames = Object.keys(
   Object.getOwnPropertyDescriptors(Reflect),
 ) as Array<TTrapName>
 
-const trapsWithKey = [
+const trapsWithKey = new Set([
   'get',
   'has',
   'set',
   'defineProperty',
   'deleteProperty',
   'getOwnPropertyDescriptor',
-]
+])
 
 const parseParameters = <T extends TTarget>(trapName: TTrapName, parameters: [T, ...any[]]): {
   target: T,
@@ -93,7 +93,7 @@ const createHandlerContext = <T extends TTarget>(
 ): THandlerContext<T> => {
   const { trapName, handler, traps, root, path } = trapContext
   const {target, name, val, receiver, args, descriptor, thisValue, prototype} = parseParameters(trapName, parameters)
-  const key = trapsWithKey.includes(trapName) ? name : undefined
+  const key = trapsWithKey.has(trapName) ? name : undefined
   const newValue = trapName === 'set' ? val : undefined
 
   // prettier-ignore
@@ -128,11 +128,11 @@ const trap = function <T extends TTarget>(
 ) {
   const { trapName, handler } = this
   const handlerContext = createHandlerContext(this, parameters)
-  const { PROXY, DEFAULT } = handlerContext
+  const { PROXY, DEFAULT, value } = handlerContext
   const result = handler(handlerContext)
 
   if (result === PROXY) {
-    return PROXY(handlerContext.value)
+    return PROXY(value)
   }
 
   if (result === DEFAULT) {

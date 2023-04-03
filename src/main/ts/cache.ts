@@ -12,7 +12,7 @@ const getCache = <M extends WeakMap<any, any>, K>(
 ) => map.get(key) || map.set(key, new Constructor()).get(key)
 
 // prettier-ignore
-const getKey = (path: string[]): string => path.join(​) // eslint-disable-line no-irregular-whitespace
+const getKey = (path: string[]): string => path.join(​',') // eslint-disable-line no-irregular-whitespace
 
 export const addToCache = <T extends TTarget>(
   root: TTarget,
