@@ -3,22 +3,9 @@
 name: CI
 on: [push, pull_request]
 jobs:
-  init:
-    name: init
-    runs-on: ubuntu-20.04
-    outputs:
-      skip: ${{ steps.ci-skip-step.outputs.ci-skip }}
-      skip-not: ${{ steps.ci-skip-step.outputs.ci-skip-not }}
-    steps:
-      - uses: actions/checkout@v3
-      - id: ci-skip-step
-        uses: mstachniuk/ci-skip@v1
-
   build:
     name: build
-    needs: init
-    if: ${{ needs.init.outputs.skip == 'false' }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -49,7 +36,7 @@ jobs:
   test_push:
     needs: build
     if: github.event_name == 'push'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
 
@@ -88,7 +75,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        os: [ ubuntu-20.04 ]
+        os: [ ubuntu-22.04 ]
         node-version: [ 14, 16, 18 ]
     name: Test (Node v${{ matrix.node-version }}, OS ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
@@ -105,11 +92,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn
       - name: Test only
-        if: matrix.node-version != '18' || matrix.os != 'ubuntu-20.04'
+        if: matrix.node-version != '18' || matrix.os != 'ubuntu-22.04'
         run: yarn test
 
       - name: Test & push coverage
-        if: matrix.node-version == '18' && matrix.os == 'ubuntu-20.04'
+        if: matrix.node-version == '18' && matrix.os == 'ubuntu-22.04'
         run: yarn test
 
   release:
@@ -117,7 +104,7 @@ jobs:
     # https://github.community/t/trigger-job-on-tag-push-only/18076
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: test_push
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
 
@@ -138,13 +125,12 @@ jobs:
           coverageLocations: |
             ${{github.workspace}}/coverage/*.lcov:lcov
 
-      - name: Release
+      - name: Semantic Release
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          GH_USER: 'qiwibot'
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GIT_AUTHOR_EMAIL: 'opensource@qiwi.com'
-          GIT_COMMITTER_EMAIL: 'opensource@qiwi.com'
-          GIT_AUTHOR_NAME: '@qiwibot'
-          GIT_COMMITTER_NAME: '@qiwibot'
-        run: npx -p @qiwi/semrel-toolkit semrel
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GIT_AUTHOR_NAME: ${{ secrets.GIT_AUTHOR_NAME }}
+          GIT_AUTHOR_EMAIL: ${{ secrets.GIT_AUTHOR_EMAIL }}
+          GIT_COMMITTER_NAME: ${{ secrets.GIT_COMMITTER_NAME }}
+          GIT_COMMITTER_EMAIL: ${{ secrets.GIT_COMMITTER_EMAIL }}
+        run: npm_config_yes=true npx zx-semrel
