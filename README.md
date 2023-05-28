@@ -20,8 +20,8 @@ yarn add @qiwi/deep-proxy
 * Proxy self-reference in handler context (meaningful for methods binding)
 * JS, TS and Flow support
 * Magic directives:
-  * `PROXY` to provide infinitely nested proxies
-  * `DEFAULT` to provide default behavior
+  * `PROXY` to build an infinite nested proxy chain
+  * `DEFAULT` to switch to the object's default behavior
 * Caching
 * Trap params parsing
 
