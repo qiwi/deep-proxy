@@ -64,7 +64,7 @@
     "@qiwi/substrate": "^2.0.3",
     "@swissquote/crafty-preset-jest": "^1.21.1",
     "@types/jest": "^29.5.0",
-    "@types/node": "^18.15.11",
+    "@types/node": "^20.0.0",
     "eslint": "^8.37.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-qiwi": "^2.1.1",
