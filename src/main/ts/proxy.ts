@@ -10,9 +10,9 @@ import type {
   TTrapContext,
   TProxyFactoryThis,
   DeepProxyConstructor,
-} from './interface'
+} from './interface.ts'
 
-import { addToCache, getFromCache } from './cache'
+import { addToCache, getFromCache } from './cache.ts'
 
 export const DEFAULT = Symbol('default')
 

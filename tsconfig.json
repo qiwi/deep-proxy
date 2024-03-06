@@ -2,29 +2,26 @@
   "compilerOptions": {
     "rootDir": "./src/main/ts/",
     "baseUrl": "./src/main/ts/",
-    "moduleResolution": "node",
-    "target": "es5",
-    "lib": [
-      "es6",
-      "esnext",
-      "dom"
-    ],
-    "module": "ES2015",
-    "outDir": "./target/es5",
-    "strict": true,
-    "experimentalDecorators": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": false,
-    "declaration": true,
     "esModuleInterop": true,
-    "importHelpers": true,
-    "noEmitHelpers": true,
-
-    "incremental": true,
-    "tsBuildInfoFile": "./buildcache/.tsbuildinfo"
+    "allowImportingTsExtensions": true,
+    "module": "nodenext",
+    "target": "esnext",
+    "strict": true,
+    "noImplicitAny": true,
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": false,
+    "outDir": "target/esm"
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true
+  },
+  "include": [
+    "src/main/ts/"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/test"
+  ]
 }

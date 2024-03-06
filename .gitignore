@@ -30,6 +30,7 @@ coverage.*
 codeclimate.*
 cc-reporter
 cc-reporter.*
+buildstamp.json
 
 # Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
