@@ -64,7 +64,6 @@ export type TProxyCache = {
 
   // And these traps refer to proxies
   proxies: WeakMap<TTraps, TProxy<TTarget>>
-  _c?: Cache
 }
 
 export interface DeepProxyConstructor {
