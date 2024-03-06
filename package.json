@@ -1,6 +1,6 @@
 {
   "name": "@qiwi/deep-proxy",
-  "version": "1.8.4",
+  "version": "3.0.0",
   "description": "Deep proxy implementation for TypeScript",
   "type": "module",
   "main": "target/cjs/index.cjs",

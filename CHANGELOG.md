@@ -1,3 +1,12 @@
+## [3.0.0](https://github.com/qiwi/deep-proxy/compare/v2.0.3...v3.0.0) (2024-03-06)
+
+### Fixes & improvements
+* perf: deps revision ([6379919](https://github.com/qiwi/deep-proxy/commit/6379919763168873579e720152e4d7295f4f2ecb))
+* perf: up deps ([b30f878](https://github.com/qiwi/deep-proxy/commit/b30f878361433b5b7745699249880b3a10ecee18))
+
+### BREAKING CHANGES
+* new bundling flow may affect smth ([6379919](https://github.com/qiwi/deep-proxy/commit/6379919763168873579e720152e4d7295f4f2ecb))
+
 ## [1.8.4](https://github.com/qiwi/deep-proxy/compare/v1.8.3...v1.8.4) (2022-01-31)
 
 
