@@ -297,6 +297,21 @@ describe('DeepProxy', () => {
       })
     })
   })
+
+  it('proxy as fn chain', () => {
+    // eslint-disable-next-line
+    const proxy: any = new DeepProxy(() => {}, ({target, args, PROXY, DEFAULT, path, trapName}) => {
+      if (trapName === 'get') return PROXY(target)
+      if (trapName === 'apply') return path.join('.') + (args.length > 0 ? `(${args.join(',')})` : '')
+
+      return DEFAULT
+    })
+
+    expect(proxy.foo()).toBe('foo')
+    expect(proxy.foo.bar()).toBe('foo.bar')
+    expect(proxy.foo.bar.baz()).toBe('foo.bar.baz')
+    expect(proxy.foo.bar.baz(1,2)).toBe('foo.bar.baz(1,2)')
+  })
 })
 
 describe('createDeepProxy', () => {
