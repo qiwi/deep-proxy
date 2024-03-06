@@ -1,42 +1,41 @@
 {
   "name": "@qiwi/deep-proxy",
   "version": "1.8.4",
-  "private": false,
   "description": "Deep proxy implementation for TypeScript",
   "type": "module",
-  "main": "./target/bundle/deep-proxy.cjs",
-  "types": "./target/es6/index.d.ts",
-  "module": "./target/bundle/deep-proxy.mjs",
+  "main": "target/cjs/index.cjs",
   "exports": {
     ".": {
-      "import": "./target/es6/index.js",
-      "module": "./target/es6/index.js",
-      "require": "./target/bundle/deep-proxy.cjs"
+      "types": "./target/dts/index.d.ts",
+      "require": "./target/cjs/index.cjs",
+      "import": "./target/esm/index.mjs",
+      "default": "./target/esm/index.mjs"
     }
   },
-  "unpkg": "./target/bundle/deep-proxy.umd.js",
-  "typescript": {
-    "definition": "typings/index.d.ts"
-  },
+  "module": "target/esm/index.mjs",
+  "types": "target/dts/index.d.ts",
+  "files": [
+    "README.md",
+    "CHANGELOG.md",
+    "target/cjs",
+    "target/esm",
+    "target/dts",
+    "flow-typed"
+  ],
   "scripts": {
-    "lint": "eslint 'src/**/*.+(js|ts)'",
-    "lint:fix": "yarn lint --fix",
-    "test": "yarn lint && yarn test:unit",
+    "format": "yarn lint --fix && prettier --write \"src/**/*.ts\"",
+    "test": "concurrently 'npm:test:*'",
+    "test:lint": "eslint 'src/**/*.+(js|ts)'",
     "test:unit": "NODE_OPTIONS=--experimental-vm-modules jest --config=jest.config.json --runInBand",
     "clean": "rimraf target typings flow-typed buildcache",
-    "build": "yarn clean && yarn build:libdef && yarn build:ts && yarn docs && yarn build:bundle && yarn build:es5 && yarn build:es6 && yarn uglify",
-    "build:es5": "mkdir -p target/es5 && tsc -p tsconfig.es5.json && yarn tsc-esm-fix --target=target/es5 --ext='.cjs'",
-    "build:es6": "mkdir -p target/es6 && tsc -p tsconfig.es6.json && yarn tsc-esm-fix --target=target/es6 --ext='.js'",
-    "build:ts": "mkdir -p target/ts && cp -r src/main/ts/ target/ts/",
-    "build:bundle": "microbundle --tsconfig tsconfig.es5.json build src/main/ts/index.ts -o target/bundle",
-    "build:libdef": "libdefkit --tsconfig=tsconfig.es5.json --tsconfig=tsconfig.es6.json",
-    "test:report": "yarn test && yarn push:report",
-    "push:report": "yarn coveralls:push",
-    "coveralls:push": "cat ./coverage/lcov.info | npm_config_yes=true npx coveralls || exit 0",
-    "docs": "typedoc",
-    "uglify": "for f in $(find target -name '*.js'); do short=${f%.js}; terser -c -m -o $short.js -- $f; done",
-    "postupdate": "yarn && npm_config_yes=true npx yarn-audit-fix --audit-level=moderate && yarn build && yarn test",
-    "format": "prettier --write \"src/**/*.ts\""
+    "build": "concurrently 'npm:build:*'",
+    "build:esm": "node ./src/scripts/build.cjs",
+    "build:cjs": "node ./src/scripts/build.cjs --cjs",
+    "build:dts": "tsc --emitDeclarationOnly --declaration --outDir target/dts",
+    "build:docs": "typedoc",
+    "build:stamp": "npm_config_yes=true npx buildstamp",
+    "_build:libdef": "libdefkit --tsconfig=tsconfig.json --customTypings='target/dts/*.ts' --entry='@qiwi/deep-proxy' --dtsOut='flow-typed/index.d.ts'",
+    "postupdate": "yarn && npm_config_yes=true npx yarn-audit-fix --audit-level=moderate && yarn build && yarn test"
   },
   "repository": {
     "type": "git",
@@ -50,35 +49,28 @@
     "deep-proxy",
     "nested-proxy"
   ],
-  "files": [
-    "README.md",
-    "CHANGELOG.md",
-    "target",
-    "typings",
-    "flow-typed"
-  ],
   "author": "Anton Golub <a.golub@qiwi.com>",
   "license": "MIT",
   "devDependencies": {
-    "@qiwi/libdefkit": "^6.0.0",
-    "@qiwi/substrate": "^2.0.3",
-    "@swissquote/crafty-preset-jest": "^1.21.1",
-    "@types/jest": "^29.5.0",
-    "@types/node": "^20.0.0",
-    "eslint": "^8.37.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-config-qiwi": "^2.1.1",
-    "jest": "^29.5.0",
-    "microbundle": "^0.15.1",
-    "prettier": "^3.0.0",
-    "rimraf": "^5.0.0",
-    "terser": "^5.16.8",
-    "ts-jest": "^29.1.0",
-    "tsc-esm-fix": "^2.20.12",
-    "typedoc": "^0.25.0",
+    "@qiwi/libdefkit": "^5.0.0",
+    "@qiwi/substrate": "^2.0.4",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.11.5",
+    "c8": "^9.0.0",
+    "cache": "^3.0.0",
+    "concurrently": "^8.2.2",
+    "esbuild": "^0.19.11",
+    "esbuild-node-externals": "^1.12.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-qiwi": "^2.1.3",
+    "jest": "^29.7.0",
+    "prettier": "^3.2.4",
+    "rimraf": "^5.0.5",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.2",
+    "tsc-esm-fix": "^2.20.21",
+    "typedoc": "^0.25.7",
     "typescript": "5.3.3"
-  },
-  "dependencies": {
-    "tslib": "^2.5.0"
   }
 }

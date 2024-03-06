@@ -6,7 +6,7 @@ import {
   DeepProxy,
   DEFAULT,
   TProxyHandler,
-} from '../../main/ts'
+} from '../../main/ts/index.ts'
 
 const simpleNestHandler: TProxyHandler = ({
   trapName,

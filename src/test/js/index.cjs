@@ -1,5 +1,5 @@
 describe('js builds', () => {
-  it('DeepProxy is properly exported (es5)', async () => {
-    expect(typeof require('../../../target/es5/index.cjs').DeepProxy).toBe('function') // eslint-disable-line
+  it('DeepProxy is properly exported (cjs)', async () => {
+    expect(typeof require('@qiwi/deep-proxy').DeepProxy).toBe('function') // eslint-disable-line
   })
 })

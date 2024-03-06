@@ -1,6 +1,6 @@
 {
   "name": "@qiwi/deep-proxy",
-  "out": "./docs",
+  "out": "./target/docs",
   "entryPoints": ["src/main/ts/"],
   "exclude": ["src/test", "**/node_modules/**", "paralleljs"],
   "externalPattern": ["**/node_modules/**"],
@@ -8,5 +8,5 @@
   "hideGenerator": true,
   "readme": "README.md",
   "theme": "default",
-  "tsconfig": "./tsconfig.es5.json"
+  "tsconfig": "./tsconfig.json"
 }
