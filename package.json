@@ -56,8 +56,6 @@
     "@qiwi/substrate": "^2.1.0",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.24",
-    "c8": "^9.1.0",
-    "cache": "^3.0.0",
     "concurrently": "^8.2.2",
     "esbuild": "^0.20.1",
     "esbuild-node-externals": "^1.13.0",
@@ -69,7 +67,6 @@
     "rimraf": "^5.0.5",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
-    "tsc-esm-fix": "^2.20.26",
     "typedoc": "^0.25.11",
     "typescript": "5.3.3"
   }
