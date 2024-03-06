@@ -61,8 +61,8 @@ jobs:
     name: PR (Node v${{ matrix.node-version }}, OS ${{ matrix.os }})
     strategy:
       matrix:
-        os: [ ubuntu-22.04, windows-latest ]
-        node-version: [ 20 ]
+        os: [ ubuntu-22.04 ]
+        node-version: [ 16, 20 ]
 
     runs-on: ${{ matrix.os }}
     steps:
