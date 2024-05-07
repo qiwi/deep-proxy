@@ -57,7 +57,7 @@
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.24",
     "concurrently": "^8.2.2",
-    "esbuild": "^0.20.1",
+    "esbuild": "^0.21.0",
     "esbuild-node-externals": "^1.13.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
