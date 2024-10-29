@@ -55,7 +55,7 @@
     "@qiwi/libdefkit": "^6.1.4",
     "@qiwi/substrate": "^2.1.0",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.11.24",
+    "@types/node": "^22.0.0",
     "concurrently": "^9.0.0",
     "esbuild": "^0.24.0",
     "esbuild-node-externals": "^1.13.0",
